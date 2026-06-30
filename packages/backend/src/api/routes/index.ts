@@ -1,0 +1,5 @@
+export { default as pokemonRoutes } from './pokemon.routes'
+export { default as authRoutes } from './auth.routes'
+export { default as userRoutes } from './user.routes'
+export { default as scanRoutes } from './scan.routes'
+export { default as assistantRoutes } from './assistant.routes'
