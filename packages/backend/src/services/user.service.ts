@@ -18,13 +18,13 @@ export async function registerUser(email: string, username: string, password: st
   const passwordHash = await bcrypt.hash(password, 10)
 
   const user = await prisma.user.create({
-    data: { email, username, passwordHash },
+    data: { email, username, passwordHash, role: 'USER' },
   })
 
-  const token = generateToken(user.id, user.email)
+  const token = generateToken(user.id, user.email, user.role)
 
   return {
-    user: { id: user.id, email: user.email, username: user.username, createdAt: user.createdAt },
+    user: { id: user.id, email: user.email, username: user.username, role: user.role, createdAt: user.createdAt },
     token,
   }
 }
@@ -40,10 +40,10 @@ export async function loginUser(email: string, password: string): Promise<{ user
     throw new AppError(401, 'Invalid email or password')
   }
 
-  const token = generateToken(user.id, user.email)
+  const token = generateToken(user.id, user.email, user.role)
 
   return {
-    user: { id: user.id, email: user.email, username: user.username, createdAt: user.createdAt },
+    user: { id: user.id, email: user.email, username: user.username, role: user.role, createdAt: user.createdAt },
     token,
   }
 }
@@ -111,6 +111,6 @@ export async function recordScan(
   return formatScanHistory(scan)
 }
 
-function generateToken(userId: string, email: string): string {
-  return jwt.sign({ userId, email }, env.JWT_SECRET, { expiresIn: '7d' })
+function generateToken(userId: string, email: string, role: string): string {
+  return jwt.sign({ userId, email, role }, env.JWT_SECRET, { expiresIn: '7d' })
 }

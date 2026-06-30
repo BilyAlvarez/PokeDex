@@ -29,11 +29,11 @@ async function request<T>(path: string, options?: RequestInit): Promise<T> {
 export const api = {
   auth: {
     register: (data: { email: string; username: string; password: string }) =>
-      request<{ user: { id: string; email: string; username: string; createdAt: string }; token: string }>(
+      request<{ user: { id: string; email: string; username: string; role: string; createdAt: string }; token: string }>(
         '/auth/register', { method: 'POST', body: JSON.stringify(data) }
       ),
     login: (data: { email: string; password: string }) =>
-      request<{ user: { id: string; email: string; username: string; createdAt: string }; token: string }>(
+      request<{ user: { id: string; email: string; username: string; role: string; createdAt: string }; token: string }>(
         '/auth/login', { method: 'POST', body: JSON.stringify(data) }
       ),
   },
@@ -78,5 +78,20 @@ export const api = {
       request<import('../types').ChatResponse>('/assistant/chat', { method: 'POST', body: JSON.stringify(data) }),
     narrate: (pokemonId: string) =>
       request<{ text: string }>('/assistant/narrate', { method: 'POST', body: JSON.stringify({ pokemonId }) }),
+  },
+
+  admin: {
+    stats: () => request<import('../types/admin').AdminStats>('/admin/stats'),
+    integrations: () => request<import('../types/admin').Integration[]>('/admin/integrations'),
+    updateIntegration: (id: string, data: Record<string, unknown>) =>
+      request<import('../types/admin').Integration>(`/admin/integrations/${id}`, { method: 'PUT', body: JSON.stringify(data) }),
+    tickets: (status?: string) => request<import('../types/admin').SupportTicket[]>(`/admin/tickets${status ? `?status=${status}` : ''}`),
+    updateTicket: (id: string, data: Record<string, string>) =>
+      request<import('../types/admin').SupportTicket>(`/admin/tickets/${id}`, { method: 'PUT', body: JSON.stringify(data) }),
+    users: () => request<import('../types/admin').AdminUser[]>('/admin/users'),
+    updateUserRole: (id: string, role: string) =>
+      request<import('../types/admin').AdminUser>(`/admin/users/${id}/role`, { method: 'PUT', body: JSON.stringify({ role }) }),
+    logs: (limit?: number) => request<import('../types/admin').SystemLogEntry[]>(`/admin/logs${limit ? `?limit=${limit}` : ''}`),
+    seed: () => request<{ message: string }>('/admin/seed', { method: 'POST' }),
   },
 }

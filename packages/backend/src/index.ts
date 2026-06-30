@@ -6,7 +6,7 @@ import 'dotenv/config'
 import { env } from './config/env'
 import { connectDatabase } from './config/database'
 import { errorHandler } from './api/middleware/errorHandler.middleware'
-import { pokemonRoutes, authRoutes, userRoutes, scanRoutes, assistantRoutes } from './api/routes'
+import { pokemonRoutes, authRoutes, userRoutes, scanRoutes, assistantRoutes, adminRoutes } from './api/routes'
 
 const app = express()
 
@@ -23,6 +23,7 @@ app.use('/api/v1/auth', authRoutes)
 app.use('/api/v1/user', userRoutes)
 app.use('/api/v1/scan', scanRoutes)
 app.use('/api/v1/assistant', assistantRoutes)
+app.use('/api/v1/admin', adminRoutes)
 
 app.use(errorHandler)
 
