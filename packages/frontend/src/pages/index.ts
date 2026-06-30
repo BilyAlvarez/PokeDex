@@ -1,0 +1,8 @@
+export { SplashScreen } from './SplashScreen'
+export { HomePage } from './HomePage'
+export { ScanPage } from './ScanPage'
+export { PokemonPage } from './PokemonPage'
+export { MyPokedexPage } from './MyPokedexPage'
+export { SearchPage } from './SearchPage'
+export { AssistantPage } from './AssistantPage'
+export { LoginPage } from './LoginPage'
