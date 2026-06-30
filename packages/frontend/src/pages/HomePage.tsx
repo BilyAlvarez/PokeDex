@@ -23,21 +23,24 @@ export function HomePage() {
         ledStatus="green"
         topScreen={
           <TopScreen>
-            <img
-              src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/25.png"
-              alt="Pikachu"
-              className="w-24 h-24 object-contain opacity-30"
-            />
-            <p className="text-xs font-mono text-gray-400">Pokédex Real v0.1</p>
+            <div className="flex flex-col items-center gap-3">
+              <div className="w-16 h-16 rounded-full border-2 border-cream flex items-center justify-center">
+                <div className="w-8 h-8 bg-cream rounded-full" />
+              </div>
+              <div className="text-center">
+                <p className="dex-mono-label">SYSTEM READY</p>
+                <p className="text-[10px] font-mono text-gray-300 mt-0.5">Pokédex Real v0.1</p>
+              </div>
+            </div>
           </TopScreen>
         }
         bottomScreen={
           <BottomScreen>
             <div className="text-center mb-6">
-              <h1 className="text-3xl font-bold text-[#CC1F1F] tracking-wider">POKÉDEX</h1>
-              <p className="text-[#2D2D2D]/60 text-sm mt-1">Identify. Learn. Complete.</p>
+              <h1 className="dex-brand-title">POKÉDEX</h1>
+              <p className="text-charcoal/60 text-sm mt-1">Identify. Learn. Complete.</p>
               {user && (
-                <p className="text-sm text-[#2D2D2D] mt-2">Welcome, <span className="font-semibold">{user.username}</span>!</p>
+                <p className="text-sm text-charcoal mt-2">Welcome, <span className="font-semibold">{user.username}</span>!</p>
               )}
             </div>
 
@@ -54,6 +57,11 @@ export function HomePage() {
               <Button variant={user ? 'ghost' : 'secondary'} onClick={() => handleNavigation(user ? '/pokedex' : '/login')}>
                 {user ? 'Profile' : 'Login'}
               </Button>
+              {user?.role === 'ADMIN' && (
+                <Button variant="ghost" onClick={() => handleNavigation('/admin')}>
+                  Admin
+                </Button>
+              )}
             </div>
           </BottomScreen>
         }

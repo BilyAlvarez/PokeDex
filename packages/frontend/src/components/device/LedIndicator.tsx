@@ -10,7 +10,9 @@ const colors = {
 }
 
 export function LedIndicator({ status }: LedIndicatorProps) {
+  const isOn = status !== 'off'
+
   return (
-    <div className={`w-3 h-3 rounded-full ${colors[status]} transition-all duration-300`} />
+    <div className={`w-3 h-3 rounded-full ${colors[status]} transition-all duration-300 ${isOn ? 'animate-led' : ''}`} />
   )
 }

@@ -1,9 +1,11 @@
 export function Hinge() {
   return (
-    <div className="hidden md:flex flex-col items-center justify-center px-2">
-      <div className="w-1 h-16 bg-[#8E1212] rounded-full" />
-      <div className="w-3 h-3 bg-[#8E1212] rounded-full my-2" />
-      <div className="w-1 h-16 bg-[#8E1212] rounded-full" />
+    <div className="hidden md:flex flex-col items-center justify-center px-3">
+      <div className="flex flex-col items-center gap-1">
+        <div className="w-5 h-5 rounded-full bg-gradient-to-b from-[#a01010] to-[#6a0a0a] shadow-[inset_0_1px_2px_rgba(255,255,255,0.15),0_2px_4px_rgba(0,0,0,0.3)]" />
+        <div className="w-1.5 h-10 bg-gradient-to-b from-[#8E1212] to-[#6a0a0a] rounded-full shadow-inner" />
+        <div className="w-5 h-5 rounded-full bg-gradient-to-b from-[#a01010] to-[#6a0a0a] shadow-[inset_0_1px_2px_rgba(255,255,255,0.15),0_2px_4px_rgba(0,0,0,0.3)]" />
+      </div>
     </div>
   )
 }

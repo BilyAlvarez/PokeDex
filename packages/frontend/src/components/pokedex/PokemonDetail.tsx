@@ -17,8 +17,8 @@ export function PokemonDetail({ pokemon }: PokemonDetailProps) {
           <img src={pokemon.artworkUrl} alt={pokemon.name} className="w-32 h-32 object-contain" />
         )}
         <div className="text-center">
-          <span className="text-sm font-mono text-gray-500">#{String(pokemon.nationalDexNumber).padStart(3, '0')}</span>
-          <h2 className="text-2xl font-bold capitalize text-[#2D2D2D]">{pokemon.name}</h2>
+          <span className="dex-dex-number">#{String(pokemon.nationalDexNumber).padStart(3, '0')}</span>
+          <h2 className="text-2xl font-bold capitalize text-charcoal">{pokemon.name}</h2>
           {pokemon.category && <p className="text-sm text-gray-500">{pokemon.category}</p>}
           <div className="flex gap-1 justify-center mt-2">
             {pokemon.types.map(type => (
@@ -29,8 +29,8 @@ export function PokemonDetail({ pokemon }: PokemonDetailProps) {
       </div>
 
       <div>
-        <h3 className="text-sm font-bold text-[#8E1212] uppercase tracking-wider mb-2">Description</h3>
-        <p className="text-sm text-[#2D2D2D] leading-relaxed">{pokemon.description}</p>
+        <h3 className="dex-section-heading">Description</h3>
+        <p className="text-sm text-charcoal leading-relaxed">{pokemon.description}</p>
       </div>
 
       <div className="grid grid-cols-2 gap-4 text-sm">
@@ -52,17 +52,17 @@ export function PokemonDetail({ pokemon }: PokemonDetailProps) {
       </div>
 
       <div>
-        <h3 className="text-sm font-bold text-[#8E1212] uppercase tracking-wider mb-2">Base Stats</h3>
+        <h3 className="dex-section-heading">Base Stats</h3>
         <StatsChart stats={pokemon.baseStats} />
       </div>
 
       <div>
-        <h3 className="text-sm font-bold text-[#8E1212] uppercase tracking-wider mb-2">Evolutions</h3>
+        <h3 className="dex-section-heading">Evolutions</h3>
         <EvolutionChain evolutions={pokemon.evolutions} />
       </div>
 
       <div>
-        <h3 className="text-sm font-bold text-[#8E1212] uppercase tracking-wider mb-2">Moves</h3>
+        <h3 className="dex-section-heading">Moves</h3>
         <MovesList moves={pokemon.moves} />
       </div>
     </div>

@@ -23,14 +23,14 @@ export function StatsChart({ stats }: StatsChartProps) {
         const pct = Math.min((value / maxStat) * 100, 100)
         return (
           <div key={key} className="flex items-center gap-2 text-sm">
-            <span className="w-8 font-mono font-bold text-[#2D2D2D] text-xs">{STAT_NAMES[key]}</span>
-            <div className="flex-1 bg-[#E8E0D0] rounded-full h-3 overflow-hidden">
+            <span className="w-8 font-mono font-bold text-charcoal text-xs">{STAT_NAMES[key]}</span>
+            <div className="flex-1 bg-cream rounded-full h-3 overflow-hidden">
               <div
-                className="h-full rounded-full bg-[#00B4D8] transition-all duration-500"
+                className="h-full rounded-full bg-pokedex-cyan transition-all duration-500"
                 style={{ width: `${pct}%` }}
               />
             </div>
-            <span className="w-6 text-right font-mono text-xs text-[#2D2D2D]">{value}</span>
+            <span className="w-6 text-right font-mono text-xs text-charcoal">{value}</span>
           </div>
         )
       })}

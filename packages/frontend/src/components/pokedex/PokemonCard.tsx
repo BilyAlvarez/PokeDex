@@ -19,24 +19,32 @@ export function PokemonCard({ pokemon }: PokemonCardProps) {
   return (
     <button
       onClick={handleClick}
-      className="bg-[#F5F0E8] rounded-lg p-3 border-2 border-[#E8E0D0] hover:border-[#CC1F1F]
-                 transition-all duration-200 hover:shadow-lg active:scale-95 cursor-pointer text-left w-full"
+      className="w-full bg-bone rounded-xl p-3 border-2 border-cream
+                 hover:border-pokedex-red hover:shadow-[0_4px_16px_rgba(204,31,31,0.15)]
+                 transition-all duration-200 active:scale-[0.97] cursor-pointer text-left group"
     >
       <div className="flex items-center gap-3">
         {pokemon.spriteUrl && (
-          <img src={pokemon.spriteUrl} alt={pokemon.name} className="w-16 h-16 object-contain" />
+          <div className="dex-sprite-square">
+            <img
+              src={pokemon.spriteUrl}
+              alt={pokemon.name}
+              className="w-11 h-11 object-contain group-hover:scale-110 transition-transform duration-200"
+            />
+          </div>
         )}
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2">
-            <span className="text-xs font-mono text-gray-500">#{String(pokemon.nationalDexNumber).padStart(3, '0')}</span>
-            <h3 className="font-semibold text-[#2D2D2D] truncate capitalize">{pokemon.name}</h3>
+            <span className="dex-dex-number">#{String(pokemon.nationalDexNumber).padStart(3, '0')}</span>
+            <h3 className="font-semibold text-charcoal truncate capitalize group-hover:text-pokedex-red transition-colors">{pokemon.name}</h3>
           </div>
-          <div className="flex gap-1 mt-1">
+          <div className="flex gap-1 mt-1.5">
             {pokemon.types.map(type => (
               <TypeBadge key={type} type={type} size="sm" />
             ))}
           </div>
         </div>
+        <span className="text-gray-300 group-hover:text-pokedex-red transition-colors text-sm">›</span>
       </div>
     </button>
   )

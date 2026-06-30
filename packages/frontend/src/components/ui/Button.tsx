@@ -6,10 +6,10 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 }
 
 const variants = {
-  primary: 'bg-[#CC1F1F] text-white hover:bg-[#8E1212] active:scale-95',
-  secondary: 'bg-[#00B4D8] text-white hover:bg-[#0090b0] active:scale-95',
+  primary: 'bg-pokedex-red text-white hover:bg-pokedex-dark active:scale-95',
+  secondary: 'bg-pokedex-cyan text-white hover:bg-[#0090b0] active:scale-95',
   danger: 'bg-red-600 text-white hover:bg-red-700 active:scale-95',
-  ghost: 'bg-transparent text-[#2D2D2D] hover:bg-[#E8E0D0] active:scale-95',
+  ghost: 'bg-transparent text-charcoal hover:bg-cream active:scale-95',
 }
 
 const sizes = {

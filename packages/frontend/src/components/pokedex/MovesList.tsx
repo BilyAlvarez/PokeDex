@@ -20,7 +20,7 @@ export function MovesList({ moves }: MovesListProps) {
             key={method}
             onClick={() => setFilter(method)}
             className={`text-xs px-2 py-1 rounded-full capitalize cursor-pointer transition-colors
-              ${filter === method ? 'bg-[#CC1F1F] text-white' : 'bg-[#E8E0D0] text-[#2D2D2D] hover:bg-gray-300'}`}
+              ${filter === method ? 'bg-pokedex-red text-white' : 'bg-cream text-charcoal hover:bg-gray-300'}`}
           >
             {method}
           </button>
@@ -29,9 +29,9 @@ export function MovesList({ moves }: MovesListProps) {
 
       <div className="space-y-1 max-h-60 overflow-auto">
         {filtered.map(move => (
-          <div key={move.id} className="flex items-center gap-2 text-sm bg-[#E8E0D0] rounded px-2 py-1.5">
+          <div key={move.id} className="flex items-center gap-2 text-sm bg-cream rounded px-2 py-1.5">
             <TypeBadge type={move.type} size="sm" />
-            <span className="flex-1 font-medium capitalize text-[#2D2D2D]">{move.name.replace('-', ' ')}</span>
+            <span className="flex-1 font-medium capitalize text-charcoal">{move.name.replace('-', ' ')}</span>
             {move.level && <span className="text-xs font-mono text-gray-500">Lv.{move.level}</span>}
             {move.power && <span className="text-xs font-mono text-gray-500 w-8 text-right">{move.power}</span>}
             {move.accuracy && <span className="text-xs font-mono text-gray-500 w-8 text-right">{move.accuracy}%</span>}

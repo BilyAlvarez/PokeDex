@@ -55,7 +55,7 @@ export function ScanPage() {
               </div>
             )}
 
-            {error && <p className="text-red-500 text-xs mt-2 text-center">{error}</p>}
+            {error && <p className="dex-error text-xs mt-2">{error}</p>}
           </div>
         }
         bottomScreen={
@@ -63,7 +63,7 @@ export function ScanPage() {
             {result?.identified && result.pokemon ? (
               <div className="text-center">
                 <p className="text-green-600 font-bold text-lg">{result.message}</p>
-                <p className="text-2xl font-bold capitalize mt-2">{result.pokemon.name}</p>
+                <p className="text-2xl font-bold capitalize text-charcoal mt-2">{result.pokemon.name}</p>
                 {result.pokemon.spriteUrl && (
                   <img src={result.pokemon.spriteUrl} alt="" className="w-20 h-20 mx-auto object-contain" />
                 )}
@@ -78,19 +78,19 @@ export function ScanPage() {
               </div>
             ) : result?.candidates ? (
               <div className="text-center">
-                <p className="text-sm text-gray-600 mb-2">{result.message}</p>
+                <p className="dex-screen-subtitle mb-2">{result.message}</p>
                 <div className="space-y-1">
                   {result.candidates.map((c, i) => (
-                    <p key={i} className="text-sm capitalize font-mono">
+                    <p key={i} className="text-sm capitalize font-mono text-charcoal">
                       {c.species} — {(c.confidence * 100).toFixed(0)}%
                     </p>
                   ))}
                 </div>
               </div>
             ) : result && !result.identified ? (
-              <p className="text-sm text-gray-500 text-center">{result.message}</p>
+              <p className="dex-empty">{result.message}</p>
             ) : (
-              <p className="text-sm text-gray-400 text-center italic">Point the camera at a Pokémon to scan</p>
+              <p className="dex-empty">Point the camera at a Pokémon to scan</p>
             )}
           </div>
         }

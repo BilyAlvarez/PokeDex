@@ -35,8 +35,8 @@ export function AssistantPage() {
       topScreen={
         <TopScreen>
           <div className="text-center">
-            <p className="text-lg font-bold text-[#2D2D2D]">Assistant</p>
-            <p className="text-xs text-gray-400">Ask me anything about Pokémon</p>
+            <p className="dex-screen-title">Assistant</p>
+            <p className="dex-screen-subtitle">Ask me anything about Pokémon</p>
           </div>
         </TopScreen>
       }
@@ -45,9 +45,7 @@ export function AssistantPage() {
           <div className="flex flex-col h-full">
             <div className="flex-1 overflow-auto space-y-2 mb-3 max-h-[300px]">
               {messages.length === 0 && (
-                <p className="text-sm text-gray-400 text-center italic mt-8">
-                  How can I help you, Trainer?
-                </p>
+                <p className="dex-empty mt-8">How can I help you, Trainer?</p>
               )}
               {messages.map((msg, i) => (
                 <AssistantMessage key={i} message={msg} />
@@ -61,14 +59,13 @@ export function AssistantPage() {
                 value={input}
                 onChange={e => setInput(e.target.value)}
                 placeholder="Ask something..."
-                className="flex-1 bg-white border border-[#E8E0D0] rounded-lg px-3 py-2 text-sm
-                           focus:outline-none focus:border-[#CC1F1F]"
+                className="dex-input flex-1"
               />
               <VoiceInput onResult={handleVoiceResult} />
               <button
                 type="submit"
                 disabled={loading || !input.trim()}
-                className="bg-[#00B4D8] text-white px-4 rounded-lg text-sm font-semibold
+                className="bg-pokedex-cyan text-white px-4 rounded-lg text-sm font-semibold
                            hover:bg-[#0090b0] disabled:opacity-50 transition-colors cursor-pointer"
               >
                 Send
