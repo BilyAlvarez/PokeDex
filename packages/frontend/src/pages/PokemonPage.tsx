@@ -4,6 +4,7 @@ import { DeviceShell } from '../components/device/DeviceShell'
 import { TopScreen } from '../components/device/TopScreen'
 import { BottomScreen } from '../components/device/BottomScreen'
 import { PokemonDetail } from '../components/pokedex/PokemonDetail'
+import { IdentificationCard } from '../components/pokedex/IdentificationCard'
 import { LoadingSpinner } from '../components/ui/LoadingSpinner'
 import { usePokemonStore } from '../stores/pokemonStore'
 import { AssistantPanel } from '../components/assistant/AssistantPanel'
@@ -20,7 +21,7 @@ export function PokemonPage() {
     } else {
       fetchById(id)
     }
-  }, [id])
+  }, [id, fetchById, fetchByDexNumber])
 
   return (
     <>
@@ -28,15 +29,19 @@ export function PokemonPage() {
         ledStatus={current ? 'green' : 'off'}
         topScreen={
           <TopScreen>
-            {current?.spriteUrl && (
-              <img src={current.spriteUrl} alt={current.name} className="w-24 h-24 object-contain" />
+            {current ? (
+              <IdentificationCard pokemon={current} />
+            ) : (
+              <div className="w-16 h-16 rounded-full bg-cream flex items-center justify-center">
+                <span className="text-2xl text-gray-400">?</span>
+              </div>
             )}
           </TopScreen>
         }
         bottomScreen={
           <BottomScreen>
             {loading && <LoadingSpinner />}
-            {error && <p className="text-red-500 text-sm">{error}</p>}
+            {error && <p className="dex-error">{error}</p>}
             {current && <PokemonDetail pokemon={current} />}
           </BottomScreen>
         }

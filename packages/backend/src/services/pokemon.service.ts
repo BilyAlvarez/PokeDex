@@ -1,5 +1,5 @@
 import { prisma } from '../config/database'
-import { fetchPokemonByIdOrName, fetchPokemonList } from '../integrations/pokeapi'
+import { fetchPokemonByIdOrName } from '../integrations/pokeapi'
 import { formatPokemon, formatPokemonDetail, formatEvolution, formatMove } from '../utils/formatters'
 import { PokemonData, PokemonDetail, EvolutionData, MoveData } from '../models/Pokemon'
 import { AppError } from '../api/middleware/errorHandler.middleware'

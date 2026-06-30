@@ -20,7 +20,7 @@ export function MyPokedexPage() {
 
   useEffect(() => {
     fetchList({ page, limit })
-  }, [page])
+  }, [page, fetchList])
 
   return (
     <>
@@ -29,7 +29,7 @@ export function MyPokedexPage() {
         topScreen={
           <TopScreen>
             <div className="text-center">
-              <p className="text-lg font-bold text-[#2D2D2D]">My Pokédex</p>
+              <p className="dex-screen-title">My Pokédex</p>
               <ProgressBar current={total} total={898} />
             </div>
           </TopScreen>
@@ -40,7 +40,7 @@ export function MyPokedexPage() {
 
             {!token && (
               <div className="text-center">
-                <p className="text-sm text-gray-500 mb-3">Login to track your progress</p>
+                <p className="dex-screen-subtitle mb-3">Login to track your progress</p>
                 <Button onClick={() => navigate('/login')}>Login</Button>
               </div>
             )}

@@ -3,10 +3,11 @@ import { useUserStore } from '../stores/userStore'
 
 export function useAuth() {
   const store = useUserStore()
+  const init = useUserStore(s => s.init)
 
   useEffect(() => {
-    store.init()
-  }, [])
+    init()
+  }, [init])
 
   return store
 }

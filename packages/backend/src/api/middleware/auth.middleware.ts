@@ -6,6 +6,7 @@ import { AppError } from './errorHandler.middleware'
 export interface AuthPayload {
   userId: string
   email: string
+  role: string
 }
 
 declare global {

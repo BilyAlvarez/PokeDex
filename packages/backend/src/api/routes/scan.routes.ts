@@ -1,5 +1,5 @@
 import { Router } from 'express'
-import { authMiddleware, optionalAuth } from '../middleware/auth.middleware'
+import { optionalAuth } from '../middleware/auth.middleware'
 import { processScan } from '../../services/scan.service'
 import { recordScan } from '../../services/user.service'
 import { scanSchema } from '../../utils/validators'

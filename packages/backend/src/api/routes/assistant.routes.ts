@@ -1,5 +1,5 @@
 import { Router } from 'express'
-import { authMiddleware, optionalAuth } from '../middleware/auth.middleware'
+import { optionalAuth } from '../middleware/auth.middleware'
 import { processChat, narrateDescription } from '../../services/assistant.service'
 import { chatSchema } from '../../utils/validators'
 import { getPokemonById } from '../../services/pokemon.service'

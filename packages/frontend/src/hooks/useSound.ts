@@ -23,15 +23,15 @@ export function useSound() {
   }, [])
 
   const playBip = useCallback(() => {
-    play('/sounds/bip.mp3', 80)
+    play('/sounds/bip.wav', 80)
   }, [play])
 
   const playScan = useCallback(() => {
-    play('/sounds/scan.mp3', 500)
+    play('/sounds/scan.wav', 500)
   }, [play])
 
   const playConfirm = useCallback(() => {
-    play('/sounds/confirm.mp3', 300)
+    play('/sounds/confirm.wav', 300)
   }, [play])
 
   return { play, playBip, playScan, playConfirm }

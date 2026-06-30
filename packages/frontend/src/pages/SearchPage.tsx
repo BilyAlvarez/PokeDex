@@ -23,7 +23,7 @@ export function SearchPage() {
 
   useEffect(() => {
     doSearch()
-  }, [type, gen])
+  }, [doSearch])
 
   const handleSearch = (query: string) => {
     setSearch(query)
@@ -54,7 +54,7 @@ export function SearchPage() {
                 <PokemonCard key={p.id} pokemon={p} />
               ))}
               {!loading && list.length === 0 && (
-                <p className="text-sm text-gray-400 text-center italic">No Pokémon found</p>
+                <p className="dex-empty">No Pokémon found</p>
               )}
             </div>
           </BottomScreen>

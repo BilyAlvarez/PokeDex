@@ -1,4 +1,27 @@
+@import "tailwindcss";
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap');
+
+/* ─── Design Tokens ──────────────────────────────────────────────────────────
+ * All colors live here as Tailwind v4 @theme variables.
+ * This generates utility classes: bg-pokedex-red, text-charcoal, etc.
+ * Rules:
+ *   1. Never use arbitrary hex values like [#CC1F1F] in JSX.
+ *   2. Use Tailwind tokens: text-pokedex-red, bg-bone, border-cream, etc.
+ *   3. For custom patterns, use .dex-* utility classes below.
+ *   4. All pages must mount inside <DeviceShell> (or the login layout).
+ * ─────────────────────────────────────────────────────────────────────────── */
+
+@theme {
+  --color-pokedex-red: #cc1f1f;
+  --color-pokedex-dark: #8e1212;
+  --color-pokedex-amber: #f2b705;
+  --color-pokedex-cyan: #00b4d8;
+  --color-charcoal: #2d2d2d;
+  --color-bone: #f5f0e8;
+  --color-cream: #e8e0d0;
+  --color-cream-dark: #d5cdbd;
+  --color-device-black: #1a1a1a;
+}
 
 *,
 *::before,
@@ -6,16 +29,6 @@
   box-sizing: border-box;
   margin: 0;
   padding: 0;
-}
-
-:root {
-  --color-pokedex-red: #cc1f1f;
-  --color-pokedex-red-dark: #8e1212;
-  --color-amber: #f2b705;
-  --color-cyan: #00b4d8;
-  --color-charcoal: #2d2d2d;
-  --color-bone: #f5f0e8;
-  --color-cream: #e8e0d0;
 }
 
 html,
@@ -32,6 +45,172 @@ body {
   height: 100%;
 }
 
-.font-mono {
+/* ─── Typography utilities ───────────────────────────────────────────────── */
+
+/* Large brand heading shown on the device screen and login card */
+.dex-brand-title {
+  font-size: 1.875rem;
+  font-weight: 700;
+  color: var(--color-pokedex-red);
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+}
+
+/* Primary section title inside a screen panel */
+.dex-screen-title {
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: var(--color-charcoal);
+}
+
+/* Secondary descriptive text below a title */
+.dex-screen-subtitle {
+  font-size: 0.75rem;
+  color: #9ca3af;
+}
+
+/* Monospace ALL-CAPS badge/label (e.g. "SYSTEM READY", page numbers) */
+.dex-mono-label {
   font-family: 'JetBrains Mono', 'Fira Code', monospace;
+  font-size: 0.625rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: #9ca3af;
+}
+
+/* Pokédex entry number (#001) */
+.dex-dex-number {
+  font-family: 'JetBrains Mono', 'Fira Code', monospace;
+  font-size: 0.75rem;
+  color: #9ca3af;
+  letter-spacing: 0.05em;
+}
+
+/* Sub-section heading inside detail views (Base Stats, Moves, etc.) */
+.dex-section-heading {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--color-pokedex-dark);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: 0.5rem;
+}
+
+/* ─── Card containers ────────────────────────────────────────────────────── */
+
+.dex-card {
+  background-color: var(--color-bone);
+  border-radius: 0.75rem;
+  padding: 0.75rem;
+  border: 2px solid var(--color-cream);
+}
+
+/* Interactive card with hover/active states — use as className on <button> */
+.dex-card-interactive {
+  display: block;
+  width: 100%;
+  text-align: left;
+  background-color: var(--color-bone);
+  border-radius: 0.75rem;
+  padding: 0.75rem;
+  border: 2px solid var(--color-cream);
+  cursor: pointer;
+  transition: border-color 0.2s, box-shadow 0.2s, transform 0.1s;
+}
+
+.dex-card-interactive:hover {
+  border-color: var(--color-pokedex-red);
+  box-shadow: 0 4px 16px rgba(204, 31, 31, 0.15);
+}
+
+.dex-card-interactive:active {
+  transform: scale(0.97);
+}
+
+/* ─── Sprite containers ──────────────────────────────────────────────────── */
+
+/* Round frame — used in IdentificationCard / PokemonPage top panel */
+.dex-sprite-round {
+  width: 5rem;
+  height: 5rem;
+  border-radius: 9999px;
+  background: linear-gradient(to bottom, var(--color-cream), var(--color-cream-dark));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Square frame — used in PokemonCard list items */
+.dex-sprite-square {
+  width: 3.5rem;
+  height: 3.5rem;
+  border-radius: 0.75rem;
+  background: linear-gradient(to bottom, var(--color-cream), var(--color-cream-dark));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.08);
+}
+
+/* ─── Form elements ──────────────────────────────────────────────────────── */
+
+.dex-input {
+  background-color: #ffffff;
+  border: 1px solid var(--color-cream);
+  border-radius: 0.5rem;
+  padding: 0.5rem 0.75rem;
+  font-size: 0.875rem;
+  color: var(--color-charcoal);
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+.dex-input:focus {
+  border-color: var(--color-pokedex-red);
+}
+
+.dex-input::placeholder {
+  color: #9ca3af;
+}
+
+/* ─── State messages ─────────────────────────────────────────────────────── */
+
+/* Empty state — "No Pokémon found", "How can I help you?" */
+.dex-empty {
+  font-size: 0.875rem;
+  color: #9ca3af;
+  text-align: center;
+  font-style: italic;
+}
+
+/* Inline error text */
+.dex-error {
+  font-size: 0.875rem;
+  color: #ef4444;
+  text-align: center;
+}
+
+/* ─── Login page layout ──────────────────────────────────────────────────── */
+
+/* Full-page wrapper for the login/register route */
+.dex-login-page {
+  min-height: 100svh;
+  background-color: var(--color-pokedex-red);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+
+/* Card holding the login/register form */
+.dex-login-card {
+  background-color: var(--color-bone);
+  border-radius: 1rem;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  padding: 2rem;
+  width: 100%;
+  max-width: 24rem;
+  border: 2px solid var(--color-pokedex-dark);
 }
