@@ -1,0 +1,136 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum ProgressStatus {
+  NOT_SEEN
+  SEEN
+  CAUGHT
+}
+
+enum LearnMethod {
+  LEVEL
+  TM
+  EGG
+  TUTOR
+}
+
+model User {
+  id           String         @id @default(cuid())
+  email        String         @unique
+  username     String         @unique
+  passwordHash String
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+
+  progress     UserProgress[]
+  scanHistory  ScanHistory[]
+  sessions     Session[]
+
+  @@map("users")
+}
+
+model Session {
+  id        String   @id @default(cuid())
+  userId    String
+  token     String   @unique
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("sessions")
+}
+
+model Pokemon {
+  id              String         @id @default(cuid())
+  nationalDexNumber Int          @unique
+  name            String
+  types           String[]
+  height          Float
+  weight          Float
+  description     String
+  habitat         String?
+  category        String?
+  abilities       String[]
+  baseStats       Json
+  spriteUrl       String?
+  artworkUrl      String?
+  generation      Int
+  createdAt       DateTime       @default(now())
+  updatedAt       DateTime       @updatedAt
+
+  evolutions      Evolution[]    @relation("PokemonEvolutions")
+  evolvesFrom     Evolution[]    @relation("EvolvesFrom")
+  moves           Move[]
+  progress        UserProgress[]
+  scanHistory     ScanHistory[]
+
+  @@map("pokemon")
+}
+
+model Evolution {
+  id           String  @id @default(cuid())
+  pokemonId    String
+  evolvesToId  String
+  condition    String?
+  conditionDetail String?
+
+  pokemon   Pokemon @relation("PokemonEvolutions", fields: [pokemonId], references: [id])
+  evolvesTo Pokemon @relation("EvolvesFrom", fields: [evolvesToId], references: [id])
+
+  @@map("evolutions")
+}
+
+model Move {
+  id          String      @id @default(cuid())
+  pokemonId   String
+  name        String
+  type        String
+  power       Int?
+  accuracy    Int?
+  pp          Int?
+  description String?
+  learnMethod LearnMethod
+  level       Int?
+
+  pokemon Pokemon @relation(fields: [pokemonId], references: [id], onDelete: Cascade)
+
+  @@map("moves")
+}
+
+model UserProgress {
+  id        String         @id @default(cuid())
+  userId    String
+  pokemonId String
+  status    ProgressStatus @default(NOT_SEEN)
+  scannedAt DateTime?
+  photoUrl  String?
+  createdAt DateTime       @default(now())
+  updatedAt DateTime       @updatedAt
+
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  pokemon Pokemon @relation(fields: [pokemonId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, pokemonId])
+  @@map("user_progress")
+}
+
+model ScanHistory {
+  id         String   @id @default(cuid())
+  userId     String
+  pokemonId  String
+  confidence Float
+  imageUrl   String?
+  createdAt  DateTime @default(now())
+
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  pokemon Pokemon @relation(fields: [pokemonId], references: [id], onDelete: Cascade)
+
+  @@map("scan_history")
+}
