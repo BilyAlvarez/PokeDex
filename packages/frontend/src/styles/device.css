@@ -1,0 +1,12 @@
+.device-shell {
+  position: relative;
+}
+
+.device-shell::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 1rem;
+  background: linear-gradient(135deg, transparent 40%, rgba(255,255,255,0.05) 60%, transparent 80%);
+  pointer-events: none;
+}
