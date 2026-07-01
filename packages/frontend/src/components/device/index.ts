@@ -1,4 +1,3 @@
-export { DeviceShell } from './DeviceShell'
 export { TopScreen } from './TopScreen'
 export { BottomScreen } from './BottomScreen'
 export { ButtonPanel } from './ButtonPanel'

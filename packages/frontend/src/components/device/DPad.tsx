@@ -19,7 +19,7 @@ export function DPad({ onNavigate }: DPadProps) {
         <span className="text-xs">◀</span>
       </button>
       <div className="w-11 h-11 flex items-center justify-center">
-        <div className="w-3 h-3 bg-[#3a3a3a] rounded-full shadow-[inset_0_2px_4px_rgba(0,0,0,0.5)]" />
+        <div className="w-3 h-3 bg-dpad-center rounded-full shadow-[inset_0_2px_4px_rgba(0,0,0,0.5)]" />
       </div>
       <button className={`${btn} rounded-r-lg justify-start pl-1`} onClick={() => onNavigate?.('right')}>
         <span className="text-xs">▶</span>

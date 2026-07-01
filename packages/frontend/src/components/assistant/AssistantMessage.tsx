@@ -10,10 +10,10 @@ export function AssistantMessage({ message }: AssistantMessageProps) {
   return (
     <div className={`flex ${isUser ? 'justify-end' : 'justify-start'}`}>
       <div
-        className={`max-w-[80%] rounded-lg px-3 py-2 text-sm ${
+        className={`max-w-[80%] rounded-2xl px-3.5 py-2.5 text-sm leading-relaxed ${
           isUser
-            ? 'bg-[#CC1F1F] text-white rounded-br-none'
-            : 'bg-[#E8E0D0] text-[#2D2D2D] rounded-bl-none'
+            ? 'bg-pokedex-red text-white rounded-br-sm'
+            : 'bg-white text-charcoal border border-cream rounded-bl-sm'
         }`}
       >
         {message.content}

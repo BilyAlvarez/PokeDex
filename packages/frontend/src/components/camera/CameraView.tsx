@@ -1,4 +1,5 @@
 import { RefObject } from 'react'
+import { useTranslation } from '../../i18n/useTranslation'
 
 interface CameraViewProps {
   videoRef: RefObject<HTMLVideoElement | null>
@@ -7,8 +8,10 @@ interface CameraViewProps {
 }
 
 export function CameraView({ videoRef, active, mirrored = false }: CameraViewProps) {
+  const { t } = useTranslation()
+
   return (
-    <div className="relative w-full aspect-[4/3] bg-black rounded-lg overflow-hidden border-2 border-[#00B4D8]">
+    <div className="absolute inset-0 bg-black overflow-hidden">
       {active ? (
         <video
           ref={videoRef}
@@ -18,8 +21,8 @@ export function CameraView({ videoRef, active, mirrored = false }: CameraViewPro
           className={`w-full h-full object-cover ${mirrored ? 'scale-x-[-1]' : ''}`}
         />
       ) : (
-        <div className="flex items-center justify-center h-full text-[#F5F0E8] text-sm font-mono">
-          Camera inactive
+        <div className="flex items-center justify-center h-full text-bone text-sm font-mono">
+          {t('camera.inactive')}
         </div>
       )}
       <div className="absolute inset-0 border-4 border-transparent rounded-lg pointer-events-none" />

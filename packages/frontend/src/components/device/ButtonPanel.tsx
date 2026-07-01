@@ -13,8 +13,8 @@ export function ButtonPanel({ onNavigate, onSelect }: ButtonPanelProps) {
         <button
           onClick={onSelect}
           className="w-14 h-8 bg-pokedex-cyan text-white text-xs font-bold rounded-md
-                     shadow-[0_3px_0_#0084a0,0_4px_8px_rgba(0,0,0,0.2)]
-                     active:shadow-[0_1px_0_#0084a0] active:translate-y-[2px]
+                     shadow-[0_3px_0_var(--color-pokedex-cyan-dark),0_4px_8px_rgba(0,0,0,0.2)]
+                     active:shadow-[0_1px_0_var(--color-pokedex-cyan-dark)] active:translate-y-[2px]
                      transition-all duration-75 cursor-pointer select-none tracking-wider uppercase"
         >
           Select

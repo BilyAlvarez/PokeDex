@@ -15,15 +15,15 @@ export function ScanOverlay({ active }: ScanOverlayProps) {
       exit={{ opacity: 0 }}
     >
       <motion.div
-        className="absolute left-0 right-0 h-1 bg-[#00B4D8] shadow-[0_0_12px_rgba(0,180,216,0.8)]"
+        className="absolute left-0 right-0 h-1 bg-pokedex-cyan shadow-[0_0_12px_rgba(0,180,216,0.8)]"
         initial={{ top: 0 }}
         animate={{ top: ['0%', '100%', '0%'] }}
         transition={{ duration: 2, repeat: Infinity, ease: 'linear' }}
       />
-      <div className="absolute top-0 left-0 w-8 h-8 border-t-4 border-l-4 border-[#00B4D8] rounded-tl" />
-      <div className="absolute top-0 right-0 w-8 h-8 border-t-4 border-r-4 border-[#00B4D8] rounded-tr" />
-      <div className="absolute bottom-0 left-0 w-8 h-8 border-b-4 border-l-4 border-[#00B4D8] rounded-bl" />
-      <div className="absolute bottom-0 right-0 w-8 h-8 border-b-4 border-r-4 border-[#00B4D8] rounded-br" />
+      <div className="absolute top-0 left-0 w-8 h-8 border-t-4 border-l-4 border-pokedex-cyan rounded-tl" />
+      <div className="absolute top-0 right-0 w-8 h-8 border-t-4 border-r-4 border-pokedex-cyan rounded-tr" />
+      <div className="absolute bottom-0 left-0 w-8 h-8 border-b-4 border-l-4 border-pokedex-cyan rounded-bl" />
+      <div className="absolute bottom-0 right-0 w-8 h-8 border-b-4 border-r-4 border-pokedex-cyan rounded-br" />
     </motion.div>
   )
 }
