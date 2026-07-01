@@ -1,5 +1,11 @@
 import { env } from '../config/env'
 import { cacheService } from '../services/cache.service'
+import { getIntegrationConfig } from '../services/integration-config.service'
+
+async function getBaseUrl(): Promise<string> {
+  const config = await getIntegrationConfig('pokeapi')
+  return config?.baseUrl ?? env.POKEAPI_BASE_URL
+}
 
 interface PokeApiPokemon {
   id: number
@@ -11,8 +17,9 @@ interface PokeApiPokemon {
   stats: { base_stat: number; stat: { name: string } }[]
   sprites: {
     front_default: string | null
+    front_shiny: string | null
     other: {
-      'official-artwork': { front_default: string | null }
+      'official-artwork': { front_default: string | null; front_shiny: string | null }
     }
   }
   species: { url: string }
@@ -75,6 +82,8 @@ interface NormalizedPokemon {
   baseStats: Record<string, number>
   spriteUrl: string | null
   artworkUrl: string | null
+  shinySpriteUrl: string | null
+  shinyArtworkUrl: string | null
   generation: number
 }
 
@@ -83,7 +92,8 @@ export async function fetchPokemonByIdOrName(identifier: string | number): Promi
   const cached = await cacheService.get<NormalizedPokemon>(cacheKey)
   if (cached) return cached
 
-  const pokemonRes = await fetch(`${env.POKEAPI_BASE_URL}/pokemon/${identifier}`)
+  const baseUrl = await getBaseUrl()
+  const pokemonRes = await fetch(`${baseUrl}/pokemon/${identifier}`)
   if (!pokemonRes.ok) return null
   const pokemonData: PokeApiPokemon = await pokemonRes.json()
 
@@ -96,12 +106,22 @@ export async function fetchPokemonByIdOrName(identifier: string | number): Promi
   return result
 }
 
-export async function fetchPokemonList(offset = 0, limit = 20) {
+export async function testConnection(): Promise<{ success: boolean; latency: number; message: string }> {
+  const start = Date.now()
+  const baseUrl = await getBaseUrl()
+  const res = await fetch(`${baseUrl}/pokemon/1`)
+  const latency = Date.now() - start
+  if (!res.ok) return { success: false, latency, message: `HTTP ${res.status}: ${res.statusText}` }
+  return { success: true, latency, message: `PokéAPI reachable (${latency}ms)` }
+}
+
+export async function fetchPokemonList(offset = 0, limit = 20): Promise<{ count: number; results: { name: string; url: string }[] }> {
   const cacheKey = `pokemon:list:${offset}:${limit}`
-  const cached = await cacheService.get(cacheKey)
+  const cached = await cacheService.get<{ count: number; results: { name: string; url: string }[] }>(cacheKey)
   if (cached) return cached
 
-  const res = await fetch(`${env.POKEAPI_BASE_URL}/pokemon?offset=${offset}&limit=${limit}`)
+  const baseUrl = await getBaseUrl()
+  const res = await fetch(`${baseUrl}/pokemon?offset=${offset}&limit=${limit}`)
   if (!res.ok) throw new Error('Failed to fetch Pokemon list')
   const data: { results: { name: string; url: string }[]; count: number } = await res.json()
 
@@ -147,6 +167,8 @@ function normalizePokemonData(pokemon: PokeApiPokemon, species: PokeApiSpecies) 
     baseStats: stats,
     spriteUrl: pokemon.sprites.front_default,
     artworkUrl: pokemon.sprites.other['official-artwork'].front_default,
+    shinySpriteUrl: pokemon.sprites.front_shiny ?? null,
+    shinyArtworkUrl: pokemon.sprites.other?.['official-artwork']?.front_shiny ?? null,
     generation: guessGeneration(pokemon.id),
   }
 }

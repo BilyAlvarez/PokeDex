@@ -1,7 +1,7 @@
 import { Router } from 'express'
 import { optionalAuth } from '../middleware/auth.middleware'
 import { processChat, narrateDescription } from '../../services/assistant.service'
-import { chatSchema } from '../../utils/validators'
+import { chatSchema, narrateSchema } from '../../utils/validators'
 import { getPokemonById } from '../../services/pokemon.service'
 
 const router = Router()
@@ -31,11 +31,7 @@ router.post('/chat', optionalAuth, async (req, res, next) => {
 
 router.post('/narrate', optionalAuth, async (req, res, next) => {
   try {
-    const { pokemonId } = req.body
-    if (!pokemonId) {
-      res.status(400).json({ error: 'pokemonId is required' })
-      return
-    }
+    const { pokemonId } = narrateSchema.parse(req.body)
 
     const pokemon = await getPokemonById(pokemonId)
     const text = narrateDescription(
