@@ -1,6 +1,7 @@
 import { create } from 'zustand'
 import { ScanResponse } from '../types/assistant'
 import { api } from '../services/api'
+import { useUserStore } from './userStore'
 
 interface ScanState {
   scanning: boolean
@@ -20,6 +21,7 @@ export const useScanStore = create<ScanState>((set) => ({
     try {
       const result = await api.scan.submit(image)
       set({ result, scanning: false })
+      useUserStore.getState().fetchProgress()
     } catch (err) {
       set({ error: err instanceof Error ? err.message : 'Scan failed', scanning: false })
     }

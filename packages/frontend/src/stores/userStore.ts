@@ -28,6 +28,7 @@ export const useUserStore = create<UserState>((set, get) => ({
     const user = localStorage.getItem('user')
     if (token && user) {
       set({ token, user: JSON.parse(user) })
+      get().fetchProgress()
     }
   },
 
@@ -74,8 +75,8 @@ export const useUserStore = create<UserState>((set, get) => ({
     try {
       const progress = await api.user.getProgress()
       set({ progress })
-    } catch {
-      // ignore
+    } catch (e) {
+      console.error('fetchProgress', e)
     }
   },
 
@@ -85,8 +86,8 @@ export const useUserStore = create<UserState>((set, get) => ({
       set(state => ({
         progress: state.progress.map(p => p.pokemonId === pokemonId ? { ...p, ...updated } : p),
       }))
-    } catch {
-      // ignore
+    } catch (e) {
+      console.error('updateProgress', e)
     }
   },
 }))

@@ -21,6 +21,8 @@ export interface PokemonData {
   baseStats: BaseStats
   spriteUrl: string | null
   artworkUrl: string | null
+  shinySpriteUrl: string | null
+  shinyArtworkUrl: string | null
   generation: number
 }
 
@@ -54,6 +56,22 @@ export interface MoveData {
 export interface PokemonDetail extends PokemonData {
   evolutions: EvolutionData[]
   moves: MoveData[]
+  shinySpriteUrl: string | null
+  shinyArtworkUrl: string | null
+  cryUrl: string
+}
+
+export interface Team {
+  id: string
+  name: string
+  slots: TeamSlot[]
+  createdAt: string
+}
+
+export interface TeamSlot {
+  id: string
+  slotIndex: number
+  pokemon: PokemonData
 }
 
 export interface PokemonListResponse {

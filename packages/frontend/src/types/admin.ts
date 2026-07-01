@@ -17,6 +17,7 @@ export interface Integration {
   id: string
   key: string
   name: string
+  type: string
   description: string | null
   baseUrl: string | null
   apiKey: string | null
@@ -37,7 +38,7 @@ export interface SupportTicket {
   user: { id: string; username: string; email: string }
 }
 
-export interface AdminUser {
+export interface UserInfo {
   id: string
   email: string
   username: string

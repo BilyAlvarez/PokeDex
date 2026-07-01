@@ -26,6 +26,32 @@ async function request<T>(path: string, options?: RequestInit): Promise<T> {
   return res.json()
 }
 
+async function adminRequest<T>(path: string, options?: RequestInit): Promise<T> {
+  const token = localStorage.getItem('admin-token')
+  const headers: Record<string, string> = {
+    'Content-Type': 'application/json',
+    ...(options?.headers as Record<string, string>),
+  }
+
+  if (token) {
+    headers['Authorization'] = `Bearer ${token}`
+  }
+
+  const res = await fetch(`${BASE_URL}${path}`, { ...options, headers })
+
+  if (res.status === 401 || res.status === 403) {
+    localStorage.removeItem('admin-token')
+    localStorage.removeItem('admin-user')
+  }
+
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({ error: 'Request failed' }))
+    throw new Error(err.error || `HTTP ${res.status}`)
+  }
+
+  return res.json()
+}
+
 export const api = {
   auth: {
     register: (data: { email: string; username: string; password: string }) =>
@@ -35,6 +61,10 @@ export const api = {
     login: (data: { email: string; password: string }) =>
       request<{ user: { id: string; email: string; username: string; role: string; createdAt: string }; token: string }>(
         '/auth/login', { method: 'POST', body: JSON.stringify(data) }
+      ),
+    adminLogin: (data: { email: string; password: string }) =>
+      request<{ user: { id: string; email: string; username: string; role: string; createdAt: string }; token: string }>(
+        '/auth/admin-login', { method: 'POST', body: JSON.stringify(data) }
       ),
   },
 
@@ -64,13 +94,29 @@ export const api = {
       request<import('../types').ScanResponse>('/scan', { method: 'POST', body: JSON.stringify({ image }) }),
   },
 
+  team: {
+    list: () => request<import('../types/pokemon').Team[]>('/team'),
+    create: (data: { name: string; slots: { pokemonId: string; slotIndex: number }[] }) =>
+      request<import('../types/pokemon').Team>('/team', { method: 'POST', body: JSON.stringify(data) }),
+    update: (id: string, data: { name?: string; slots?: { pokemonId: string; slotIndex: number }[] }) =>
+      request<import('../types/pokemon').Team>(`/team/${id}`, { method: 'PUT', body: JSON.stringify(data) }),
+    delete: (id: string) =>
+      request<{ message: string }>(`/team/${id}`, { method: 'DELETE' }),
+  },
+
   user: {
     getProgress: () =>
       request<import('../types').UserProgressData[]>('/user/progress'),
     updateProgress: (data: { pokemonId: string; status: 'SEEN' | 'CAUGHT'; photoUrl?: string }) =>
       request<import('../types').UserProgressData>('/user/progress', { method: 'PUT', body: JSON.stringify(data) }),
+    getStats: () =>
+      request<{ seen: number; caught: number; total: number; scans: number }>('/user/stats'),
     getScans: () =>
       request<import('../types').ScanHistoryData[]>('/user/scans'),
+    updateProfile: (data: { username?: string; email?: string }) =>
+      request<import('../types').UserData>('/user/profile', { method: 'PUT', body: JSON.stringify(data) }),
+    changePassword: (data: { currentPassword: string; newPassword: string }) =>
+      request<{ message: string }>('/user/password', { method: 'PUT', body: JSON.stringify(data) }),
   },
 
   assistant: {
@@ -81,17 +127,20 @@ export const api = {
   },
 
   admin: {
-    stats: () => request<import('../types/admin').AdminStats>('/admin/stats'),
-    integrations: () => request<import('../types/admin').Integration[]>('/admin/integrations'),
+    stats: () => adminRequest<import('../types/admin').AdminStats>('/admin/stats'),
+    integrations: () => adminRequest<import('../types/admin').Integration[]>('/admin/integrations'),
+    createIntegration: (data: { key: string; name: string; type?: string; description?: string; baseUrl?: string; apiKey?: string; status?: string }) =>
+      adminRequest<import('../types/admin').Integration>('/admin/integrations', { method: 'POST', body: JSON.stringify(data) }),
     updateIntegration: (id: string, data: Record<string, unknown>) =>
-      request<import('../types/admin').Integration>(`/admin/integrations/${id}`, { method: 'PUT', body: JSON.stringify(data) }),
-    tickets: (status?: string) => request<import('../types/admin').SupportTicket[]>(`/admin/tickets${status ? `?status=${status}` : ''}`),
+      adminRequest<import('../types/admin').Integration>(`/admin/integrations/${id}`, { method: 'PUT', body: JSON.stringify(data) }),
+    deleteIntegration: (id: string) =>
+      adminRequest<{ message: string }>(`/admin/integrations/${id}`, { method: 'DELETE' }),
+    tickets: (status?: string) => adminRequest<import('../types/admin').SupportTicket[]>(`/admin/tickets${status ? `?status=${status}` : ''}`),
     updateTicket: (id: string, data: Record<string, string>) =>
-      request<import('../types/admin').SupportTicket>(`/admin/tickets/${id}`, { method: 'PUT', body: JSON.stringify(data) }),
-    users: () => request<import('../types/admin').AdminUser[]>('/admin/users'),
-    updateUserRole: (id: string, role: string) =>
-      request<import('../types/admin').AdminUser>(`/admin/users/${id}/role`, { method: 'PUT', body: JSON.stringify({ role }) }),
-    logs: (limit?: number) => request<import('../types/admin').SystemLogEntry[]>(`/admin/logs${limit ? `?limit=${limit}` : ''}`),
-    seed: () => request<{ message: string }>('/admin/seed', { method: 'POST' }),
+      adminRequest<import('../types/admin').SupportTicket>(`/admin/tickets/${id}`, { method: 'PUT', body: JSON.stringify(data) }),
+    logs: (limit?: number) => adminRequest<import('../types/admin').SystemLogEntry[]>(`/admin/logs${limit ? `?limit=${limit}` : ''}`),
+    testIntegration: (id: string) =>
+      adminRequest<{ success: boolean; latency: number; message: string }>('/admin/integrations/test', { method: 'POST', body: JSON.stringify({ id }) }),
+    seed: () => adminRequest<{ message: string }>('/admin/seed', { method: 'POST' }),
   },
 }

@@ -28,8 +28,8 @@ export function useAssistant() {
     try {
       const res = await api.assistant.narrate(pokemonId)
       ttsService.speak(res.text)
-    } catch {
-      // ignore
+    } catch (e) {
+      console.error('narrate', e)
     }
   }, [])
 
