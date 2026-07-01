@@ -24,6 +24,7 @@ export function EditProfilePage() {
       <AppLayout>
         <div className="text-center py-20">
           <p className="dex-empty">{t('editProfile.signInToEdit')}</p>
+          <Button className="mt-4" onClick={() => navigate('/login')}>{t('profile.signIn')}</Button>
         </div>
       </AppLayout>
     )

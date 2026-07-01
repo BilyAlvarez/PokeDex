@@ -1,4 +1,5 @@
 import { scanImage } from '../integrations/visionAI'
+import type { ScanImageError } from '../integrations/visionAI'
 import { fetchPokemonByIdOrName } from '../integrations/pokeapi'
 import { syncPokemonFromApi } from './pokemon.service'
 import { AppError } from '../api/middleware/errorHandler.middleware'
@@ -18,10 +19,17 @@ export interface ScanResponse {
 }
 
 export async function processScan(imageBase64: string): Promise<ScanResponse> {
-  const result = await scanImage(imageBase64)
-  if (!result) {
-    throw new AppError(502, 'No vision AI configured. Set up Ollama or another vision provider in the admin panel.')
+  const out = await scanImage(imageBase64)
+
+  if ('error' in out) {
+    const err: ScanImageError = out.error
+    if (err.code === 'NO_INTEGRATION') {
+      throw new AppError(400, err.message)
+    }
+    throw new AppError(502, err.message)
   }
+
+  const result = out.result
 
   if (result.confidence >= 0.85) {
     const pokemon = await findOrSyncPokemon(result.species)

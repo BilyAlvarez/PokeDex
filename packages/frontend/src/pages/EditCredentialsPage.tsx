@@ -22,6 +22,7 @@ export function EditCredentialsPage() {
       <AppLayout>
         <div className="text-center py-20">
           <p className="dex-empty">{t('editCredentials.signInToManage')}</p>
+          <Button className="mt-4" onClick={() => navigate('/login')}>{t('profile.signIn')}</Button>
         </div>
       </AppLayout>
     )

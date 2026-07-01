@@ -56,10 +56,6 @@ export function AdminPage() {
   const [integrationForm, setIntegrationForm] = useState<IntegrationForm>(emptyForm())
   const [deleteTarget, setDeleteTarget] = useState<{ id: string; name: string } | null>(null)
 
-  useEffect(() => {
-    if (!admin) navigate('/admin/login', { replace: true })
-  }, [admin, navigate])
-
   const loadTab = useCallback(async (t: Tab) => {
     setLoading(true)
     setTab(t)
@@ -149,7 +145,35 @@ export function AdminPage() {
     } catch (e) { toast.error(String(e)) }
   }
 
-  if (!admin) return null
+  if (!admin) {
+    return (
+      <div className="min-h-screen flex items-center justify-center" style={{ background: '#0b0b12' }}>
+        <div className="text-center max-w-sm px-6">
+          <div className="w-16 h-16 mx-auto mb-5 rounded-2xl bg-red-500/10 flex items-center justify-center">
+            <svg className="w-8 h-8 text-red-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z" />
+            </svg>
+          </div>
+          <h1 className="text-xl font-bold text-white mb-2">Admin Access Required</h1>
+          <p className="text-sm text-gray-400 mb-6">You need administrator privileges to access this panel.</p>
+          <div className="flex gap-3 justify-center">
+            <button
+              onClick={() => navigate('/admin/login')}
+              className="px-5 py-2.5 rounded-xl bg-red-600 hover:bg-red-500 text-white text-sm font-semibold transition-colors cursor-pointer"
+            >
+              Admin Sign In
+            </button>
+            <button
+              onClick={() => navigate('/home')}
+              className="px-5 py-2.5 rounded-xl bg-white/5 hover:bg-white/10 text-gray-300 text-sm font-semibold transition-colors cursor-pointer"
+            >
+              Go Home
+            </button>
+          </div>
+        </div>
+      </div>
+    )
+  }
 
   return (
     <div className="min-h-screen" style={{ background: '#0b0b12' }}>

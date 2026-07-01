@@ -9,7 +9,12 @@ export interface ScanResult {
   candidates: { species: string; confidence: number }[]
 }
 
-export async function scanImage(imageBase64: string): Promise<ScanResult | null> {
+export interface ScanImageError {
+  code: 'NO_INTEGRATION' | 'CONNECTION_REFUSED' | 'REQUEST_FAILED'
+  message: string
+}
+
+export async function scanImage(imageBase64: string): Promise<{ result: ScanResult } | { error: ScanImageError }> {
   let vision = await getActiveIntegrationByType('vision')
 
   if (!vision) {
@@ -30,18 +35,24 @@ export async function scanImage(imageBase64: string): Promise<ScanResult | null>
   }
 
   if (!vision) {
-    console.error('visionAI: no vision integration found at all')
-    return null
+    return { error: { code: 'NO_INTEGRATION', message: 'No vision AI integration found. Go to Admin → Integrations to add one.' } }
   }
 
   if (vision.key === 'ollama-vision') {
-    return scanWithOllama(imageBase64, vision.baseUrl ?? undefined)
+    try {
+      const result = await scanWithOllama(imageBase64, vision.baseUrl ?? undefined)
+      if (!result) {
+        return { error: { code: 'CONNECTION_REFUSED', message: `Ollama is not running at ${vision.baseUrl || 'http://localhost:11434'}. Start Ollama or add a different vision integration.` } }
+      }
+      return { result }
+    } catch {
+      return { error: { code: 'CONNECTION_REFUSED', message: `Ollama is not running at ${vision.baseUrl || 'http://localhost:11434'}. Start Ollama or add a different vision integration.` } }
+    }
   }
 
   const visionUrl = vision.baseUrl ?? (env.VISION_API_URL || null)
   if (!visionUrl) {
-    console.error('visionAI: no vision URL configured')
-    return null
+    return { error: { code: 'NO_INTEGRATION', message: 'Vision integration has no URL configured.' } }
   }
 
   try {
@@ -51,10 +62,10 @@ export async function scanImage(imageBase64: string): Promise<ScanResult | null>
       body: JSON.stringify({ image: imageBase64 }),
     })
 
-    if (!res.ok) return null
-    return await res.json()
+    if (!res.ok) return { error: { code: 'REQUEST_FAILED', message: `Vision AI returned status ${res.status}` } }
+    const result = await res.json()
+    return { result }
   } catch (e) {
-    console.error('visionAI', e)
-    return null
+    return { error: { code: 'CONNECTION_REFUSED', message: `Cannot reach vision AI at ${visionUrl}. Check the URL and ensure the service is running.` } }
   }
 }
