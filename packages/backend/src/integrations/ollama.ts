@@ -27,16 +27,16 @@ export async function testConnection(baseUrl: string): Promise<{ success: boolea
   }
 }
 
-export async function scanWithOllama(imageBase64: string): Promise<{
+export async function scanWithOllama(imageBase64: string, baseUrlOverride?: string): Promise<{
   species: string
   confidence: number
   candidates: { species: string; confidence: number }[]
 } | null> {
-  const config = await getActiveOllamaConfig('vision')
-  if (!config?.baseUrl) return null
+  const baseUrl = baseUrlOverride ?? (await getActiveOllamaConfig('vision'))?.baseUrl ?? undefined
+  if (!baseUrl) return null
 
   try {
-    const res = await fetch(`${config.baseUrl.replace(/\/+$/, '')}/api/generate`, {
+    const res = await fetch(`${baseUrl.replace(/\/+$/, '')}/api/generate`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({

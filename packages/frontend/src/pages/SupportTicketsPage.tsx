@@ -1,14 +1,20 @@
 import { useState, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { AppLayout } from '../components/layout/AppLayout'
 import { PageHeader } from '../components/layout/PageHeader'
 import { Button } from '../components/ui/Button'
 import { Modal } from '../components/ui/Modal'
+import { useTranslation } from '../i18n/useTranslation'
+import { useUserStore } from '../stores/userStore'
 import { api } from '../services/api'
 import type { SupportTicket } from '../types/admin'
 
 const PRIORITIES = ['LOW', 'MEDIUM', 'HIGH', 'CRITICAL'] as const
 
 export function SupportTicketsPage() {
+  const { user } = useUserStore()
+  const navigate = useNavigate()
+  const { t } = useTranslation()
   const [tickets, setTickets] = useState<SupportTicket[]>([])
   const [loading, setLoading] = useState(true)
   const [msg, setMsg] = useState('')
@@ -27,8 +33,19 @@ export function SupportTicketsPage() {
     setLoading(false)
   }
 
-  /* eslint-disable-next-line react-hooks/set-state-in-effect */
+  // eslint-disable-next-line react-hooks/set-state-in-effect
   useEffect(() => { loadTickets() }, [])
+
+  if (!user) {
+    return (
+      <AppLayout>
+        <div className="text-center py-20">
+          <p className="dex-empty">{t('profile.signInToView')}</p>
+          <Button className="mt-4" onClick={() => navigate('/login')}>{t('profile.signIn')}</Button>
+        </div>
+      </AppLayout>
+    )
+  }
 
   const createTicket = async () => {
     if (!subject.trim() || !description.trim()) return
