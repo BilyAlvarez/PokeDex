@@ -1,7 +1,7 @@
 import { Router } from 'express'
 import { authMiddleware } from '../middleware/auth.middleware'
-import { getUserProgress, updateUserProgress, getScanHistory } from '../../services/user.service'
-import { progressUpdateSchema } from '../../utils/validators'
+import { getUserProgress, updateUserProgress, getUserStats, getScanHistory, updateProfile, changePassword } from '../../services/user.service'
+import { progressUpdateSchema, updateProfileSchema, changePasswordSchema } from '../../utils/validators'
 
 const router = Router()
 
@@ -26,10 +26,39 @@ router.put('/progress', async (req, res, next) => {
   }
 })
 
+router.get('/stats', async (req, res, next) => {
+  try {
+    const stats = await getUserStats(req.user!.userId)
+    res.json(stats)
+  } catch (error) {
+    next(error)
+  }
+})
+
 router.get('/scans', async (req, res, next) => {
   try {
     const scans = await getScanHistory(req.user!.userId)
     res.json(scans)
+  } catch (error) {
+    next(error)
+  }
+})
+
+router.put('/profile', async (req, res, next) => {
+  try {
+    const data = updateProfileSchema.parse(req.body)
+    const user = await updateProfile(req.user!.userId, data)
+    res.json(user)
+  } catch (error) {
+    next(error)
+  }
+})
+
+router.put('/password', async (req, res, next) => {
+  try {
+    const { currentPassword, newPassword } = changePasswordSchema.parse(req.body)
+    await changePassword(req.user!.userId, currentPassword, newPassword)
+    res.json({ message: 'Password updated successfully' })
   } catch (error) {
     next(error)
   }
