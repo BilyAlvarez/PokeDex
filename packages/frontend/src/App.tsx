@@ -1,36 +1,55 @@
-import { Routes, Route, useLocation } from 'react-router-dom'
-import { AnimatePresence, motion } from 'framer-motion'
-import { SplashScreen, HomePage, ScanPage, PokemonPage, MyPokedexPage, SearchPage, AssistantPage, LoginPage, AdminPage } from './pages'
+import { useEffect } from 'react'
+import { Routes, Route, Navigate } from 'react-router-dom'
+import { SplashScreen, HomePage, ScanPage, PokemonPage, MyPokedexPage, AssistantPage, LoginPage, AdminPage, AdminLoginPage, GalleryPage, ProfilePage, EditProfilePage, EditCredentialsPage, PreferencesPage, SettingsPage, TypeChartPage, TeamBuilderPage, NotFoundPage } from './pages'
+import { ErrorBoundary } from './components/ui/ErrorBoundary'
+import { usePreferencesStore } from './stores/preferencesStore'
 
-function AnimatedPage({ children }: { children: React.ReactNode }) {
-  return (
-    <motion.div
-      initial={{ opacity: 0, y: 8 }}
-      animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: -8 }}
-      transition={{ duration: 0.2 }}
-    >
-      {children}
-    </motion.div>
-  )
+function PreferencesApplier() {
+  const { fontSize, reduceMotion, highContrast, theme } = usePreferencesStore()
+
+  useEffect(() => {
+    const root = document.documentElement
+
+    root.classList.remove('text-sm', 'text-base', 'text-lg')
+    if (fontSize === 'small') root.classList.add('text-sm')
+    else if (fontSize === 'large') root.classList.add('text-lg')
+    else root.classList.add('text-base')
+
+    root.classList.toggle('reduce-motion', reduceMotion)
+    root.classList.toggle('high-contrast', highContrast)
+    root.classList.toggle('dark', theme === 'dark')
+  }, [fontSize, reduceMotion, highContrast, theme])
+
+  return null
 }
 
 export default function App() {
-  const location = useLocation()
-
   return (
-    <AnimatePresence mode="wait">
-      <Routes location={location} key={location.pathname}>
-        <Route path="/" element={<AnimatedPage><SplashScreen /></AnimatedPage>} />
-        <Route path="/home" element={<AnimatedPage><HomePage /></AnimatedPage>} />
-        <Route path="/scan" element={<AnimatedPage><ScanPage /></AnimatedPage>} />
-        <Route path="/pokemon/:id" element={<AnimatedPage><PokemonPage /></AnimatedPage>} />
-        <Route path="/pokedex" element={<AnimatedPage><MyPokedexPage /></AnimatedPage>} />
-        <Route path="/search" element={<AnimatedPage><SearchPage /></AnimatedPage>} />
-        <Route path="/assistant" element={<AnimatedPage><AssistantPage /></AnimatedPage>} />
-        <Route path="/login" element={<AnimatedPage><LoginPage /></AnimatedPage>} />
-        <Route path="/admin" element={<AnimatedPage><AdminPage /></AnimatedPage>} />
+    <>
+      <PreferencesApplier />
+      <ErrorBoundary>
+      <Routes>
+        <Route path="/" element={<SplashScreen />} />
+        <Route path="/home" element={<HomePage />} />
+        <Route path="/scan" element={<ScanPage />} />
+        <Route path="/pokemon/:id" element={<PokemonPage />} />
+        <Route path="/pokedex" element={<MyPokedexPage />} />
+        <Route path="/assistant" element={<AssistantPage />} />
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/admin/login" element={<AdminLoginPage />} />
+        <Route path="/admin" element={<AdminPage />} />
+        <Route path="/gallery" element={<GalleryPage />} />
+        <Route path="/profile" element={<ProfilePage />} />
+        <Route path="/profile/edit" element={<EditProfilePage />} />
+        <Route path="/profile/credentials" element={<EditCredentialsPage />} />
+        <Route path="/profile/preferences" element={<PreferencesPage />} />
+        <Route path="/profile/settings" element={<SettingsPage />} />
+        <Route path="/type-chart" element={<TypeChartPage />} />
+        <Route path="/team-builder" element={<TeamBuilderPage />} />
+        <Route path="/search" element={<Navigate to="/gallery" replace />} />
+        <Route path="*" element={<NotFoundPage />} />
       </Routes>
-    </AnimatePresence>
+      </ErrorBoundary>
+    </>
   )
 }

@@ -1,14 +1,12 @@
 @import "tailwindcss";
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap');
 
+/* Enable dark variant via .dark class */
+@custom-variant dark (&:where(.dark, .dark *));
+
 /* ─── Design Tokens ──────────────────────────────────────────────────────────
- * All colors live here as Tailwind v4 @theme variables.
- * This generates utility classes: bg-pokedex-red, text-charcoal, etc.
- * Rules:
- *   1. Never use arbitrary hex values like [#CC1F1F] in JSX.
- *   2. Use Tailwind tokens: text-pokedex-red, bg-bone, border-cream, etc.
- *   3. For custom patterns, use .dex-* utility classes below.
- *   4. All pages must mount inside <DeviceShell> (or the login layout).
+ * Tailwind v4 @theme — generates bg-*, text-*, border-* utilities automatically.
+ * Never use arbitrary hex values in JSX — use tokens.
  * ─────────────────────────────────────────────────────────────────────────── */
 
 @theme {
@@ -16,201 +14,258 @@
   --color-pokedex-dark: #8e1212;
   --color-pokedex-amber: #f2b705;
   --color-pokedex-cyan: #00b4d8;
+  --color-pokedex-cyan-dark: #0090b0;
   --color-charcoal: #2d2d2d;
-  --color-bone: #f5f0e8;
-  --color-cream: #e8e0d0;
-  --color-cream-dark: #d5cdbd;
+  --color-bone: #f4f4f6;
+  --color-cream: #e8e8ec;
+  --color-cream-dark: #d4d4da;
   --color-device-black: #1a1a1a;
+  --color-hinge-knob: #a01010;
+  --color-hinge-bar: #6a0a0a;
+  --color-dpad-center: #3a3a3a;
+  --text-xxs: 0.625rem;
 }
 
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
+/* ─── Base layer — resets and global element styles ─────────────────────────
+ * IMPORTANT: must be @layer base so Tailwind utilities (@layer utilities)
+ * properly override these resets. Non-layered CSS beats everything layered,
+ * including utilities — which would break mx-auto, p-*, etc.
+ * ─────────────────────────────────────────────────────────────────────────── */
+
+@layer base {
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  html,
+  body {
+    height: 100%;
+    font-family: 'Inter', 'Source Sans Pro', system-ui, sans-serif;
+    background-color: var(--color-bone);
+    color: var(--color-charcoal);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  #root {
+    height: 100%;
+  }
 }
 
-html,
-body {
-  height: 100%;
-  font-family: 'Inter', 'Source Sans Pro', system-ui, sans-serif;
-  background-color: var(--color-bone);
-  color: var(--color-charcoal);
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+/* ─── Components — semantic, reusable class patterns ────────────────────────
+ * In @layer components so Tailwind utilities (@layer utilities) override them.
+ * This makes hover:border-*, p-*, shadow-* work correctly on top of these.
+ * ─────────────────────────────────────────────────────────────────────────── */
+
+@layer components {
+
+  /* ── Typography ─────────────────────────────────────────────────────────── */
+
+  .dex-screen-title {
+    font-size: 1.125rem;
+    font-weight: 700;
+    color: var(--color-charcoal);
+  }
+
+  .dex-mono-label {
+    font-family: 'JetBrains Mono', 'Fira Code', monospace;
+    font-size: 0.625rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: #9ca3af;
+  }
+
+  .dex-dex-number {
+    font-family: 'JetBrains Mono', 'Fira Code', monospace;
+    font-size: 0.75rem;
+    color: #9ca3af;
+    letter-spacing: 0.05em;
+  }
+
+  .dex-section-heading {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--color-pokedex-dark);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 0.5rem;
+  }
+
+  /* ── Sprite containers ──────────────────────────────────────────────────── */
+
+  .dex-sprite-round {
+    width: 5rem;
+    height: 5rem;
+    border-radius: 9999px;
+    background: linear-gradient(to bottom, var(--color-cream), var(--color-cream-dark));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.1);
+  }
+
+  /* ── Form elements ──────────────────────────────────────────────────────── */
+
+  .dex-input {
+    display: block;
+    width: 100%;
+    background-color: #ffffff;
+    border: 1px solid var(--color-cream);
+    border-radius: 0.5rem;
+    padding: 0.5rem 0.75rem;
+    font-size: 0.875rem;
+    color: var(--color-charcoal);
+    outline: none;
+    transition: border-color 0.15s, box-shadow 0.15s;
+  }
+
+  .dex-input:focus {
+    border-color: var(--color-pokedex-red);
+    box-shadow: 0 0 0 3px rgba(204, 31, 31, 0.08);
+  }
+
+  .dex-input::placeholder {
+    color: #9ca3af;
+  }
+
+  .dex-input:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    background-color: var(--color-bone);
+  }
+
+  /* ── State messages ─────────────────────────────────────────────────────── */
+
+  .dex-empty {
+    font-size: 0.875rem;
+    color: #9ca3af;
+    text-align: center;
+    font-style: italic;
+  }
+
+  .dex-error {
+    font-size: 0.875rem;
+    color: #ef4444;
+    text-align: center;
+  }
+
+  /* ── Web layout ─────────────────────────────────────────────────────────── */
+
+  .app-card {
+    background-color: #ffffff;
+    border-radius: 1rem;
+    border: 1px solid var(--color-cream-dark);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.07), 0 1px 4px rgba(0, 0, 0, 0.05);
+  }
+
+  .app-section-title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--color-charcoal);
+    letter-spacing: -0.01em;
+  }
+
+  .app-count-label {
+    font-size: 0.75rem;
+    color: #9ca3af;
+    font-variant-numeric: tabular-nums;
+  }
+
 }
 
-#root {
-  height: 100%;
+/* ─── Utilities — small single-purpose helpers ───────────────────────────── */
+
+@layer utilities {
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* ── Preferences classes (applied to <html> via PreferencesApplier) ──────── */
+
+  .text-sm {
+    font-size: 0.875rem !important;
+  }
+
+  .text-base {
+    font-size: 1rem !important;
+  }
+
+  .text-lg {
+    font-size: 1.125rem !important;
+  }
+
+  .reduce-motion *,
+  .reduce-motion *::before,
+  .reduce-motion *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .high-contrast {
+    --color-charcoal: #000000;
+    --color-cream: #ffffff;
+    --color-cream-dark: #e0e0e0;
+    --color-bone: #fafafa;
+    --color-device-black: #000000;
+  }
 }
 
-/* ─── Typography utilities ───────────────────────────────────────────────── */
+/* ── Dark mode (via @custom-variant dark, applied when <html class="dark">) ── */
 
-/* Large brand heading shown on the device screen and login card */
-.dex-brand-title {
-  font-size: 1.875rem;
-  font-weight: 700;
-  color: var(--color-pokedex-red);
-  letter-spacing: 0.15em;
-  text-transform: uppercase;
+/* Token overrides go in base — these propagate to any utility using the var */
+@layer base {
+  .dark {
+    --color-bone: #111827;
+    --color-cream: #1f2937;
+    --color-cream-dark: #374151;
+    --color-charcoal: #f3f4f6;
+    --color-device-black: #030712;
+  }
+
+  .dark body {
+    background-color: var(--color-bone);
+    color: var(--color-charcoal);
+  }
 }
 
-/* Primary section title inside a screen panel */
-.dex-screen-title {
-  font-size: 1.125rem;
-  font-weight: 700;
-  color: var(--color-charcoal);
-}
+/* Component overrides in @layer components so they beat the light definitions */
+@layer components {
+  .dark .app-card {
+    background-color: #1f2937;
+    border-color: #374151;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+  }
 
-/* Secondary descriptive text below a title */
-.dex-screen-subtitle {
-  font-size: 0.75rem;
-  color: #9ca3af;
-}
+  .dark .dex-input {
+    background-color: #1f2937;
+    border-color: #374151;
+    color: #f3f4f6;
+  }
 
-/* Monospace ALL-CAPS badge/label (e.g. "SYSTEM READY", page numbers) */
-.dex-mono-label {
-  font-family: 'JetBrains Mono', 'Fira Code', monospace;
-  font-size: 0.625rem;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  color: #9ca3af;
-}
+  .dark .dex-input::placeholder {
+    color: #6b7280;
+  }
 
-/* Pokédex entry number (#001) */
-.dex-dex-number {
-  font-family: 'JetBrains Mono', 'Fira Code', monospace;
-  font-size: 0.75rem;
-  color: #9ca3af;
-  letter-spacing: 0.05em;
-}
+  .dark .dex-input:disabled {
+    background-color: #111827;
+  }
 
-/* Sub-section heading inside detail views (Base Stats, Moves, etc.) */
-.dex-section-heading {
-  font-size: 0.75rem;
-  font-weight: 700;
-  color: var(--color-pokedex-dark);
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  margin-bottom: 0.5rem;
-}
+  .dark .dex-empty {
+    color: #6b7280;
+  }
 
-/* ─── Card containers ────────────────────────────────────────────────────── */
-
-.dex-card {
-  background-color: var(--color-bone);
-  border-radius: 0.75rem;
-  padding: 0.75rem;
-  border: 2px solid var(--color-cream);
-}
-
-/* Interactive card with hover/active states — use as className on <button> */
-.dex-card-interactive {
-  display: block;
-  width: 100%;
-  text-align: left;
-  background-color: var(--color-bone);
-  border-radius: 0.75rem;
-  padding: 0.75rem;
-  border: 2px solid var(--color-cream);
-  cursor: pointer;
-  transition: border-color 0.2s, box-shadow 0.2s, transform 0.1s;
-}
-
-.dex-card-interactive:hover {
-  border-color: var(--color-pokedex-red);
-  box-shadow: 0 4px 16px rgba(204, 31, 31, 0.15);
-}
-
-.dex-card-interactive:active {
-  transform: scale(0.97);
-}
-
-/* ─── Sprite containers ──────────────────────────────────────────────────── */
-
-/* Round frame — used in IdentificationCard / PokemonPage top panel */
-.dex-sprite-round {
-  width: 5rem;
-  height: 5rem;
-  border-radius: 9999px;
-  background: linear-gradient(to bottom, var(--color-cream), var(--color-cream-dark));
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.1);
-}
-
-/* Square frame — used in PokemonCard list items */
-.dex-sprite-square {
-  width: 3.5rem;
-  height: 3.5rem;
-  border-radius: 0.75rem;
-  background: linear-gradient(to bottom, var(--color-cream), var(--color-cream-dark));
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-  box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.08);
-}
-
-/* ─── Form elements ──────────────────────────────────────────────────────── */
-
-.dex-input {
-  background-color: #ffffff;
-  border: 1px solid var(--color-cream);
-  border-radius: 0.5rem;
-  padding: 0.5rem 0.75rem;
-  font-size: 0.875rem;
-  color: var(--color-charcoal);
-  outline: none;
-  transition: border-color 0.15s;
-}
-
-.dex-input:focus {
-  border-color: var(--color-pokedex-red);
-}
-
-.dex-input::placeholder {
-  color: #9ca3af;
-}
-
-/* ─── State messages ─────────────────────────────────────────────────────── */
-
-/* Empty state — "No Pokémon found", "How can I help you?" */
-.dex-empty {
-  font-size: 0.875rem;
-  color: #9ca3af;
-  text-align: center;
-  font-style: italic;
-}
-
-/* Inline error text */
-.dex-error {
-  font-size: 0.875rem;
-  color: #ef4444;
-  text-align: center;
-}
-
-/* ─── Login page layout ──────────────────────────────────────────────────── */
-
-/* Full-page wrapper for the login/register route */
-.dex-login-page {
-  min-height: 100svh;
-  background-color: var(--color-pokedex-red);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 1rem;
-}
-
-/* Card holding the login/register form */
-.dex-login-card {
-  background-color: var(--color-bone);
-  border-radius: 1rem;
-  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
-  padding: 2rem;
-  width: 100%;
-  max-width: 24rem;
-  border: 2px solid var(--color-pokedex-dark);
+  .dark .dex-section-heading {
+    color: #f87171;
+  }
 }

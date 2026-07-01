@@ -10,8 +10,9 @@ export default defineConfig({
     VitePWA({
       registerType: 'autoUpdate',
       includeAssets: ['icons/*.svg', 'icons/*.png'],
+      devOptions: { enabled: true, type: 'module' },
       manifest: {
-        name: 'Pokédex Real',
+        name: 'Pokédex',
         short_name: 'Pokédex',
         description: 'Pokédex funcional con reconocimiento de imagen por IA',
         theme_color: '#CC1F1F',
@@ -50,6 +51,7 @@ export default defineConfig({
       },
       workbox: {
         globPatterns: ['**/*.{js,css,html,svg,png,ico,json}'],
+        navigateFallback: '/offline.html',
         runtimeCaching: [
           {
             urlPattern: /^https:\/\/pokeapi\.co\/api\/v2\//,
