@@ -54,6 +54,7 @@ const USER_MENU_KEYS = [
   { key: 'editCredentials' as const, to: '/profile/credentials' },
   { key: 'preferences' as const, to: '/profile/preferences' },
   { key: 'settingsAccessibility' as const, to: '/profile/settings' },
+  { key: 'supportTickets' as const, to: '/profile/tickets' },
 ]
 
 export function Navbar() {

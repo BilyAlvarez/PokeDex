@@ -12,16 +12,18 @@ import { useTranslation } from '../i18n/useTranslation'
 
 export function ScanPage() {
   const navigate = useNavigate()
-  const { videoRef, start, stop, capture } = useCamera()
+  const { videoRef, start, stop, capture, error: cameraError, isSupported } = useCamera()
   const { scanning, result, error, scan } = useScanStore()
   const { playScan } = useSound()
   const [cameraActive, setCameraActive] = useState(false)
   const { t } = useTranslation()
 
   const handleStartCamera = useCallback(async () => {
-    await start('environment')
-    setCameraActive(true)
+    const ok = await start('environment')
+    if (ok) setCameraActive(true)
   }, [start])
+
+  const displayError = error || cameraError
 
   const handleStopCamera = useCallback(() => {
     stop()
@@ -410,13 +412,23 @@ export function ScanPage() {
         </motion.div>
 
         {/* ── Error ─────────────────────────────────────────────────────── */}
-        {error && (
+        {displayError && (
           <motion.p
             initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
             className="dex-error text-sm text-center max-w-xs"
           >
-            {error}
+            {displayError}
+          </motion.p>
+        )}
+
+        {!isSupported && (
+          <motion.p
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="dex-error text-sm text-center max-w-xs"
+          >
+            {t('camera.notSupported')}
           </motion.p>
         )}
 

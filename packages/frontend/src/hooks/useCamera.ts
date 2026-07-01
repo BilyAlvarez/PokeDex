@@ -6,7 +6,7 @@ export function useCamera() {
   const [error, setError] = useState<string | null>(null)
   const videoRef = useRef<HTMLVideoElement>(null)
 
-  const start = useCallback(async (facingMode: 'user' | 'environment' = 'environment') => {
+  const start = useCallback(async (facingMode: 'user' | 'environment' = 'environment'): Promise<boolean> => {
     try {
       setError(null)
       const s = await cameraService.start(facingMode)
@@ -14,8 +14,10 @@ export function useCamera() {
       if (videoRef.current) {
         videoRef.current.srcObject = s
       }
+      return true
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Camera access denied')
+      return false
     }
   }, [])
 

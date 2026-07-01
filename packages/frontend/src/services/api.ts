@@ -117,6 +117,10 @@ export const api = {
       request<import('../types').UserData>('/user/profile', { method: 'PUT', body: JSON.stringify(data) }),
     changePassword: (data: { currentPassword: string; newPassword: string }) =>
       request<{ message: string }>('/user/password', { method: 'PUT', body: JSON.stringify(data) }),
+    tickets: () =>
+      request<import('../types/admin').SupportTicket[]>('/user/tickets'),
+    createTicket: (data: { subject: string; description: string; priority?: string }) =>
+      request<import('../types/admin').SupportTicket>('/user/tickets', { method: 'POST', body: JSON.stringify(data) }),
   },
 
   assistant: {

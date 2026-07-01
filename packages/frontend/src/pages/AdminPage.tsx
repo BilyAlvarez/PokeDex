@@ -76,7 +76,7 @@ export function AdminPage() {
       if (data[3]) setLogs(data[3] as SystemLogEntry[])
     } catch (e) { toast.error(String(e)) }
     setLoading(false)
-  }, [])
+  }, [toast])
 
   const initRef = useRef(false)
   useEffect(() => {

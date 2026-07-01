@@ -38,14 +38,6 @@ export interface SupportTicket {
   user: { id: string; username: string; email: string }
 }
 
-export interface UserInfo {
-  id: string
-  email: string
-  username: string
-  role: string
-  createdAt: string
-}
-
 export interface SystemLogEntry {
   id: string
   action: string

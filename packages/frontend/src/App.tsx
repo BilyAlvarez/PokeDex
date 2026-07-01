@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 import { Routes, Route, Navigate } from 'react-router-dom'
-import { SplashScreen, HomePage, ScanPage, PokemonPage, MyPokedexPage, AssistantPage, LoginPage, AdminPage, AdminLoginPage, GalleryPage, ProfilePage, EditProfilePage, EditCredentialsPage, PreferencesPage, SettingsPage, TypeChartPage, TeamBuilderPage, NotFoundPage } from './pages'
+import { SplashScreen, HomePage, ScanPage, PokemonPage, MyPokedexPage, AssistantPage, LoginPage, AdminPage, AdminLoginPage, GalleryPage, ProfilePage, EditProfilePage, EditCredentialsPage, PreferencesPage, SettingsPage, SupportTicketsPage, TypeChartPage, TeamBuilderPage, NotFoundPage } from './pages'
 import { ErrorBoundary } from './components/ui/ErrorBoundary'
 import { usePreferencesStore } from './stores/preferencesStore'
 
@@ -44,6 +44,7 @@ export default function App() {
         <Route path="/profile/credentials" element={<EditCredentialsPage />} />
         <Route path="/profile/preferences" element={<PreferencesPage />} />
         <Route path="/profile/settings" element={<SettingsPage />} />
+        <Route path="/profile/tickets" element={<SupportTicketsPage />} />
         <Route path="/type-chart" element={<TypeChartPage />} />
         <Route path="/team-builder" element={<TeamBuilderPage />} />
         <Route path="/search" element={<Navigate to="/gallery" replace />} />
