@@ -31,9 +31,12 @@ async function main() {
   })
 
   const integrations = [
-    { key: 'pokeapi', name: 'PokéAPI', description: 'Pokémon data source', baseUrl: 'https://pokeapi.co/api/v2', status: 'ACTIVE' as const },
-    { key: 'claude', name: 'Claude AI', description: 'Conversational assistant', baseUrl: null, status: 'INACTIVE' as const },
-    { key: 'vision', name: 'Vision AI', description: 'Image recognition engine', baseUrl: null, status: 'INACTIVE' as const },
+    { key: 'pokeapi', name: 'PokéAPI', type: 'data', description: 'Pokémon data source (REST)', baseUrl: 'https://pokeapi.co/api/v2', status: 'ACTIVE' as const },
+    { key: 'pokeapi-graphql', name: 'PokéAPI GraphQL', type: 'data', description: 'Pokémon data source (GraphQL)', baseUrl: 'https://beta.pokeapi.co/graphql/v1beta', status: 'ACTIVE' as const },
+    { key: 'claude', name: 'Claude AI', type: 'chat', description: 'Conversational assistant (Anthropic)', baseUrl: null, status: 'INACTIVE' as const },
+    { key: 'vision', name: 'Vision AI', type: 'vision', description: 'Image recognition engine (external)', baseUrl: null, status: 'INACTIVE' as const },
+    { key: 'ollama-vision', name: 'Ollama Vision', type: 'vision', description: 'Local image recognition via Ollama (llava)', baseUrl: 'http://localhost:11434', status: 'INACTIVE' as const },
+    { key: 'ollama-chat', name: 'Ollama Chat', type: 'chat', description: 'Local conversational AI via Ollama (llama3)', baseUrl: 'http://localhost:11434', status: 'ACTIVE' as const },
   ]
 
   for (const int of integrations) {
