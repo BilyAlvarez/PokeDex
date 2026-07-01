@@ -20,7 +20,7 @@ export interface ScanResponse {
 export async function processScan(imageBase64: string): Promise<ScanResponse> {
   const result = await scanImage(imageBase64)
   if (!result) {
-    throw new AppError(502, 'Scan service unavailable')
+    throw new AppError(502, 'No vision AI configured. Set up Ollama or another vision provider in the admin panel.')
   }
 
   if (result.confidence >= 0.85) {

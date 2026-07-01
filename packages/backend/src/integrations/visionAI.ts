@@ -12,7 +12,8 @@ export async function scanImage(imageBase64: string): Promise<ScanResult | null>
   const activeVision = await getActiveIntegrationByType('vision')
 
   if (!activeVision) {
-    return mockScan()
+    console.error('visionAI: no active vision integration configured')
+    return null
   }
 
   if (activeVision.key === 'ollama-vision') {
@@ -25,7 +26,8 @@ export async function scanImage(imageBase64: string): Promise<ScanResult | null>
 
   const visionUrl = visionConfig?.baseUrl ?? (env.VISION_API_URL || null)
   if (!visionUrl) {
-    return mockScan()
+    console.error('visionAI: no vision URL configured')
+    return null
   }
 
   try {
@@ -39,18 +41,6 @@ export async function scanImage(imageBase64: string): Promise<ScanResult | null>
     return await res.json()
   } catch (e) {
     console.error('visionAI', e)
-    return mockScan()
-  }
-}
-
-function mockScan(): ScanResult {
-  return {
-    species: 'pikachu',
-    confidence: 0.92,
-    candidates: [
-      { species: 'pikachu', confidence: 0.92 },
-      { species: 'raichu', confidence: 0.05 },
-      { species: 'pichu', confidence: 0.02 },
-    ],
+    return null
   }
 }

@@ -11,9 +11,6 @@ export function useCamera() {
       setError(null)
       const s = await cameraService.start(facingMode)
       setStream(s)
-      if (videoRef.current) {
-        videoRef.current.srcObject = s
-      }
       return true
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Camera access denied')
@@ -27,9 +24,16 @@ export function useCamera() {
   }, [])
 
   const capture = useCallback((): string | null => {
-    if (!videoRef.current) return null
-    return cameraService.captureFrame(videoRef.current)
+    const video = videoRef.current
+    if (!video || !video.srcObject || video.readyState < 2) return null
+    return cameraService.captureFrame(video)
   }, [])
+
+  useEffect(() => {
+    if (videoRef.current && stream) {
+      videoRef.current.srcObject = stream
+    }
+  }, [stream])
 
   useEffect(() => {
     return () => { cameraService.stop() }
