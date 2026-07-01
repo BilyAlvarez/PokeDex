@@ -1,3 +1,5 @@
+import { getActiveIntegrationByType, getIntegrationConfig } from '../services/integration-config.service'
+import { chatWithOllama } from './ollama'
 import { env } from '../config/env'
 
 interface ChatContext {
@@ -14,10 +16,25 @@ interface ChatResponse {
 }
 
 export async function chatWithAssistant(context: ChatContext): Promise<ChatResponse | null> {
-  if (!env.CLAUDE_API_KEY) {
+  const activeChat = await getActiveIntegrationByType('chat')
+
+  if (!activeChat) {
     return {
       text: 'I am a Pokédex assistant. How can I help you today?',
     }
+  }
+
+  if (activeChat.key === 'ollama-chat') {
+    return chatWithOllama(context)
+  }
+
+  const claudeConfig = activeChat.key === 'claude'
+    ? activeChat
+    : await getIntegrationConfig('claude')
+
+  const apiKey = claudeConfig?.apiKey ?? (env.CLAUDE_API_KEY || null)
+  if (!apiKey) {
+    return { text: 'I am a Pokédex assistant. How can I help you today?' }
   }
 
   const systemPrompt = buildSystemPrompt(context)
@@ -27,7 +44,7 @@ export async function chatWithAssistant(context: ChatContext): Promise<ChatRespo
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'x-api-key': env.CLAUDE_API_KEY,
+        'x-api-key': apiKey,
         'anthropic-version': '2023-06-01',
       },
       body: JSON.stringify({
@@ -44,11 +61,9 @@ export async function chatWithAssistant(context: ChatContext): Promise<ChatRespo
     if (!res.ok) return null
 
     const data = await res.json()
-    return {
-      text: data.content[0]?.text ?? '',
-    }
-  } catch (error) {
-    console.error('Claude API error:', error)
+    return { text: data.content[0]?.text ?? '' }
+  } catch (e) {
+    console.error('claude', e)
     return null
   }
 }

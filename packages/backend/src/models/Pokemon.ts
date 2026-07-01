@@ -21,6 +21,8 @@ export interface PokemonData {
   baseStats: BaseStats
   spriteUrl: string | null
   artworkUrl: string | null
+  shinySpriteUrl: string | null
+  shinyArtworkUrl: string | null
   generation: number
 }
 

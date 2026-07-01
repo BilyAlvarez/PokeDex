@@ -29,6 +29,8 @@ export function formatPokemon(pokemon: Pokemon & { evolutions?: Evolution[]; mov
     baseStats: formatPokemonBaseStats(pokemon.baseStats),
     spriteUrl: pokemon.spriteUrl,
     artworkUrl: pokemon.artworkUrl,
+    shinySpriteUrl: pokemon.shinySpriteUrl,
+    shinyArtworkUrl: pokemon.shinyArtworkUrl,
     generation: pokemon.generation,
   }
 }

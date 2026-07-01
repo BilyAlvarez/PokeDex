@@ -62,7 +62,8 @@ async function findOrSyncPokemon(species: string) {
 
   try {
     return await syncPokemonFromApi(apiData.nationalDexNumber)
-  } catch {
+  } catch (e) {
+    console.error('scanService', e)
     return {
       id: apiData.nationalDexNumber.toString(),
       nationalDexNumber: apiData.nationalDexNumber,
