@@ -1,0 +1,32 @@
+services:
+  - type: web
+    name: pokedex-api
+    runtime: node
+    repo: https://github.com/BilyAlvarez/PokeDex
+    plan: free
+    region: oregon
+    healthCheckPath: /api/v1/health
+    buildCommand: npm install && npm run build -w packages/backend
+    startCommand: npm run start -w packages/backend
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: CORS_ORIGINS
+        value: https://pokedex.vercel.app,http://localhost:5173
+      - key: POKEAPI_BASE_URL
+        value: https://pokeapi.co/api/v2
+      - key: DATABASE_URL
+        fromDatabase:
+          name: pokedex-db
+          property: connectionString
+      - key: JWT_SECRET
+        generateValue: true
+      - key: GEMINI_API_KEY
+        sync: false
+
+databases:
+  - name: pokedex-db
+    plan: free
+    region: oregon
+    databaseName: pokedex
+    user: pokedex

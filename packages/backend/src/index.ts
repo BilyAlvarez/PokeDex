@@ -13,7 +13,7 @@ import { cacheService } from './services/cache.service'
 const app = express()
 
 app.use(helmet())
-app.use(cors({ origin: env.CORS_ORIGIN }))
+app.use(cors({ origin: env.CORS_ORIGINS }))
 app.use(express.json({ limit: '10mb' }))
 
 app.get('/api/v1/health', (_req, res) => {
