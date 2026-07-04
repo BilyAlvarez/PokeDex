@@ -7,7 +7,7 @@ services:
     region: oregon
     healthCheckPath: /api/v1/health
     buildCommand: npm install --include=dev && npx prisma generate --schema=packages/backend/prisma/schema.prisma
-    startCommand: npx tsx src/index.ts
+    startCommand: npm run start -w packages/backend
     envVars:
       - key: NODE_ENV
         value: production
