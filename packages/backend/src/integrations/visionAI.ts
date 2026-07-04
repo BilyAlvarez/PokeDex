@@ -1,5 +1,6 @@
-import { getActiveIntegrationByType } from '../services/integration-config.service'
+import { getActiveIntegrationByType, getIntegrationConfig } from '../services/integration-config.service'
 import { scanWithOllama } from './ollama'
+import { scanWithGemini } from './gemini'
 import { env } from '../config/env'
 import type { Integration as PrismaIntegration } from '@prisma/client'
 
@@ -48,6 +49,18 @@ export async function scanImage(imageBase64: string): Promise<{ result: ScanResu
     } catch {
       return { error: { code: 'CONNECTION_REFUSED', message: `Ollama is not running at ${vision.baseUrl || 'http://localhost:11434'}. Start Ollama or add a different vision integration.` } }
     }
+  }
+
+  if (vision.key === 'gemini-vision') {
+    const apiKey = vision.apiKey ?? (env.GEMINI_API_KEY || null)
+    if (!apiKey) {
+      return { error: { code: 'NO_INTEGRATION', message: 'Gemini API key not configured. Set GEMINI_API_KEY in .env or configure the integration in Admin → Integrations.' } }
+    }
+    const result = await scanWithGemini(imageBase64, apiKey)
+    if (!result) {
+      return { error: { code: 'REQUEST_FAILED', message: 'Gemini API request failed. Check your API key and quota at https://aistudio.google.com.' } }
+    }
+    return { result }
   }
 
   const visionUrl = vision.baseUrl ?? (env.VISION_API_URL || null)

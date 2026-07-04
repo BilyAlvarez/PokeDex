@@ -80,11 +80,11 @@ define(['./workbox-06918fc1'], (function (workbox) { 'use strict';
     "url": "registerSW.js",
     "revision": "3ca0b8505b4bec776b69afdba2768812"
   }, {
-    "url": "index.html",
-    "revision": "0.l1s7jg88fv4"
+    "url": "/offline.html",
+    "revision": "0.m3g147e6t0k"
   }], {});
   workbox.cleanupOutdatedCaches();
-  workbox.registerRoute(new workbox.NavigationRoute(workbox.createHandlerBoundToURL("index.html"), {
+  workbox.registerRoute(new workbox.NavigationRoute(workbox.createHandlerBoundToURL("/offline.html"), {
     allowlist: [/^\/$/]
   }));
   workbox.registerRoute(/^https:\/\/pokeapi\.co\/api\/v2\//, new workbox.CacheFirst({

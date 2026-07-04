@@ -17,4 +17,5 @@ export const env = {
   REDIS_URL: process.env.REDIS_URL || '',
   CLAUDE_API_KEY: process.env.CLAUDE_API_KEY || '',
   VISION_API_URL: process.env.VISION_API_URL || '',
+  GEMINI_API_KEY: process.env.GEMINI_API_KEY || '',
 }
