@@ -1,5 +1,4 @@
-import { useState } from 'react'
-import { useTranslation } from '../../i18n/useTranslation'
+import { useState, useMemo } from 'react'
 
 interface VoiceInputProps {
   onResult: (text: string) => void
@@ -21,8 +20,11 @@ interface SpeechRecognition extends EventTarget {
 }
 
 export function VoiceInput({ onResult }: VoiceInputProps) {
-  const { t } = useTranslation()
   const [listening, setListening] = useState(false)
+
+  const supported = useMemo(() => {
+    return !!(window.SpeechRecognition || window.webkitSpeechRecognition)
+  }, [])
 
   const toggle = () => {
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition
@@ -51,10 +53,15 @@ export function VoiceInput({ onResult }: VoiceInputProps) {
   return (
     <button
       onClick={toggle}
+      disabled={!supported}
       className={`p-2 rounded-full transition-colors ${
-        listening ? 'bg-pokedex-red text-white animate-pulse' : 'bg-cream text-charcoal hover:bg-gray-300'
+        !supported
+          ? 'bg-cream text-gray-300 cursor-not-allowed'
+          : listening
+            ? 'bg-pokedex-red text-white animate-pulse'
+            : 'bg-cream text-charcoal hover:bg-gray-300 cursor-pointer'
       }`}
-      title={t('voice.input')}
+      title={!supported ? 'Voice input not supported in this browser' : listening ? 'Listening...' : 'Voice input'}
     >
       <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
         <path strokeLinecap="round" strokeLinejoin="round" d="M12 18.75a6 6 0 006-6v-1.5m-6 7.5a6 6 0 01-6-6v-1.5m6 7.5v3.75m-3.75 0h7.5M12 15.75a3 3 0 01-3-3V4.5a3 3 0 116 0v8.25a3 3 0 01-3 3z" />
