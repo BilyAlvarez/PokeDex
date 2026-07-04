@@ -138,7 +138,56 @@
     background-color: var(--color-bone);
   }
 
-  /* ── State messages ─────────────────────────────────────────────────────── */
+    /* ── Markdown content (assistant messages) ────────────────────────────── */
+
+  .markdown-content {
+    line-height: 1.65;
+  }
+
+  .markdown-content p {
+    margin-bottom: 0.5rem;
+  }
+
+  .markdown-content p:last-child {
+    margin-bottom: 0;
+  }
+
+  .markdown-content strong {
+    font-weight: 700;
+    color: var(--color-charcoal);
+  }
+
+  .markdown-content ul,
+  .markdown-content ol {
+    margin: 0.25rem 0 0.5rem;
+    padding-left: 1.25rem;
+  }
+
+  .markdown-content li {
+    margin-bottom: 0.15rem;
+  }
+
+  .markdown-content em {
+    font-style: italic;
+  }
+
+  .markdown-content code {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.8125rem;
+    background: var(--color-bone);
+    padding: 0.1rem 0.3rem;
+    border-radius: 0.25rem;
+  }
+
+  .dark .markdown-content strong {
+    color: #f3f4f6;
+  }
+
+  .dark .markdown-content code {
+    background: #1f2937;
+  }
+
+/* ── State messages ─────────────────────────────────────────────────────── */
 
   .dex-empty {
     font-size: 0.875rem;
