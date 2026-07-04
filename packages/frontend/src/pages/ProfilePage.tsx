@@ -147,14 +147,6 @@ export function ProfilePage() {
             </div>
           </div>
         )}
-
-        <div className="mt-8 mb-6 text-center">
-          <p className="text-xs font-semibold text-gray-400 uppercase tracking-widest mb-2">{t('profile.about')}</p>
-          <div className="app-card p-4 inline-block">
-            <p className="text-sm text-charcoal font-medium">{t('profile.createdBy')}</p>
-            <p className="text-xxs text-gray-400 mt-0.5">{t('profile.appVersion')}</p>
-          </div>
-        </div>
       </div>
     </AppLayout>
   )

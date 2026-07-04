@@ -151,9 +151,6 @@ export const translations = {
       seen: 'Seen',
       caught: 'Caught',
       scans: 'Scans',
-      about: 'About',
-      createdBy: 'Created by Bily Álvarez',
-      appVersion: 'Version 0.1.0',
     },
     editProfile: {
       signInToEdit: 'Sign in to edit your profile',
@@ -503,9 +500,6 @@ export const translations = {
       seen: 'Vistos',
       caught: 'Atrapados',
       scans: 'Escaneos',
-      about: 'Acerca de',
-      createdBy: 'Creado por Bily Álvarez',
-      appVersion: 'Versión 0.1.0',
     },
     editProfile: {
       signInToEdit: 'Inicia sesión para editar tu perfil',

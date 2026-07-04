@@ -16,6 +16,9 @@ export function AppLayout({ children }: AppLayoutProps) {
         {children}
       </main>
       <BottomNav />
+      <footer className="hidden sm:block text-center py-4 text-xxs text-gray-400">
+        Pokédex &mdash; creado por <span className="font-semibold text-gray-500">Bily Álvarez</span>
+      </footer>
       <AssistantPanel />
       <ToastContainer />
     </div>

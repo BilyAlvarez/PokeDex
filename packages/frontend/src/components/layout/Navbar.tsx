@@ -430,6 +430,11 @@ export function Navbar() {
                         {t('nav.logout')}
                       </button>
                     </div>
+                    <div className="border-t border-cream/80 px-4 py-2">
+                      <p className="text-xxs text-gray-400 text-center leading-relaxed">
+                        Pokédex &mdash; <span className="font-medium text-gray-500">BMAS-DEV</span>
+                      </p>
+                    </div>
                   </motion.div>
                 )}
                 </AnimatePresence>
