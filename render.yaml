@@ -6,7 +6,7 @@ services:
     plan: free
     region: oregon
     healthCheckPath: /api/v1/health
-    buildCommand: npm install && npm run build -w packages/backend
+    buildCommand: npm install && npx prisma generate --schema=packages/backend/prisma/schema.prisma && npm run build -w packages/backend
     startCommand: npm run start -w packages/backend
     envVars:
       - key: NODE_ENV
