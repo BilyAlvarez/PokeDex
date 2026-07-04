@@ -84,8 +84,8 @@ export function HomePage() {
 
   const caught = useMemo(() => progress.filter(p => p.status === 'CAUGHT').length, [progress])
   const seen = useMemo(() => progress.filter(p => p.status === 'SEEN' || p.status === 'CAUGHT').length, [progress])
-  const caughtPct = Math.round((caught / TOTAL_POKEMON) * 100)
-  const seenPct = Math.round((seen / TOTAL_POKEMON) * 100)
+  const caughtPct = caught > 0 ? Math.max(1, Math.round((caught / TOTAL_POKEMON) * 100)) : 0
+  const seenPct = seen > 0 ? Math.max(1, Math.round((seen / TOTAL_POKEMON) * 100)) : 0
 
   return (
     <AppLayout>
