@@ -1,11 +1,11 @@
 {
   "rewrites": [
     {
-      "source": "/api/v1/(.*)",
-      "destination": "https://pokedex-api-en9i.onrender.com/api/v1/$1"
+      "source": "/api/v1/:path*",
+      "destination": "https://pokedex-api-en9i.onrender.com/api/v1/:path*"
     },
     {
-      "source": "/(.*)",
+      "source": "/:path*",
       "destination": "/index.html"
     }
   ]
