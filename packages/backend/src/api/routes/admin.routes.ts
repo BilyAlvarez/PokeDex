@@ -3,6 +3,7 @@ import bcrypt from 'bcrypt'
 import { prisma } from '../../config/database'
 import { adminMiddleware } from '../middleware/admin.middleware'
 import { AppError } from '../middleware/errorHandler.middleware'
+import { env } from '../../config/env'
 import { testConnection as testPokeApi } from '../../integrations/pokeapi'
 import { testConnection as testPokeApiGraphql } from '../../integrations/pokeapi-graphql'
 import { testConnection as testOllama } from '../../integrations/ollama'
@@ -194,7 +195,7 @@ router.get('/logs', async (req, res, next) => {
 
 router.post('/seed', async (_req, res, next) => {
   try {
-    const hash = await bcrypt.hash('admin123', 10)
+    const hash = await bcrypt.hash(env.ADMIN_PASSWORD, 10)
     await prisma.user.upsert({
       where: { email: 'admin@pokedex.com' },
       update: {},

@@ -6,13 +6,13 @@ services:
     plan: free
     region: oregon
     healthCheckPath: /api/v1/health
-    buildCommand: npm install --include=dev && npx prisma generate --schema=packages/backend/prisma/schema.prisma
+    buildCommand: npm install --include=dev && npx prisma generate --schema=packages/backend/prisma/schema.prisma && npx prisma migrate deploy --schema=packages/backend/prisma/schema.prisma && npm run seed -w packages/backend
     startCommand: npm run start -w packages/backend
     envVars:
       - key: NODE_ENV
         value: production
       - key: CORS_ORIGINS
-        value: https://pokedex.vercel.app,http://localhost:5173
+        value: https://pokedex-iota-green.vercel.app,http://localhost:5173
       - key: POKEAPI_BASE_URL
         value: https://pokeapi.co/api/v2
       - key: DATABASE_URL
@@ -22,6 +22,8 @@ services:
       - key: JWT_SECRET
         generateValue: true
       - key: GEMINI_API_KEY
+        sync: false
+      - key: ADMIN_PASSWORD
         sync: false
 
 databases:

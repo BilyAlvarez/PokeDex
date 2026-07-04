@@ -1,10 +1,11 @@
 import { PrismaClient } from '@prisma/client'
 import bcrypt from 'bcrypt'
+import { env } from '../src/config/env'
 
 const prisma = new PrismaClient()
 
 async function main() {
-  const adminPassword = await bcrypt.hash('admin123', 10)
+  const adminPassword = await bcrypt.hash(env.ADMIN_PASSWORD, 10)
 
   const admin = await prisma.user.upsert({
     where: { email: 'admin@pokedex.com' },
@@ -50,7 +51,7 @@ async function main() {
   }
 
   console.log('Seed complete')
-  console.log(`Admin: admin@pokedex.com / admin123`)
+  console.log(`Admin: admin@pokedex.com / ${env.ADMIN_PASSWORD}`)
   console.log(`User:  user@pokedex.com  / user123`)
 }
 
