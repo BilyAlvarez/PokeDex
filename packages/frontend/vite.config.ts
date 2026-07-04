@@ -30,6 +30,11 @@ export default defineConfig({
             type: 'image/png',
           },
           {
+            src: 'icons/icon-144x144.png',
+            sizes: '144x144',
+            type: 'image/png',
+          },
+          {
             src: 'icons/icon-192x192.png',
             sizes: '192x192',
             type: 'image/png',
@@ -45,6 +50,12 @@ export default defineConfig({
             sizes: '512x512',
             type: 'image/png',
             purpose: 'maskable',
+          },
+          {
+            src: 'icons/pokeball.svg',
+            sizes: 'any',
+            type: 'image/svg+xml',
+            purpose: 'any',
           },
         ],
         screenshots: [],
