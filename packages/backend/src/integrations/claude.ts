@@ -1,5 +1,6 @@
 import { getActiveIntegrationByType, getIntegrationConfig } from '../services/integration-config.service'
 import { chatWithOllama } from './ollama'
+import { chatWithGemini } from './gemini'
 import { env } from '../config/env'
 
 interface ChatContext {
@@ -26,6 +27,14 @@ export async function chatWithAssistant(context: ChatContext): Promise<ChatRespo
 
   if (activeChat.key === 'ollama-chat') {
     return chatWithOllama(context)
+  }
+
+  if (activeChat.key === 'gemini-chat') {
+    const apiKey = activeChat.apiKey ?? (env.GEMINI_API_KEY || null)
+    if (!apiKey) {
+      return { text: 'I am a Pokédex assistant. How can I help you today?' }
+    }
+    return chatWithGemini(context, apiKey)
   }
 
   const claudeConfig = activeChat.key === 'claude'

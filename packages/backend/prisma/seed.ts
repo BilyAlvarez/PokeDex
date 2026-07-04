@@ -38,6 +38,7 @@ async function main() {
     { key: 'ollama-vision', name: 'Ollama Vision', type: 'vision', description: 'Local image recognition via Ollama (llava)', baseUrl: 'http://localhost:11434', status: 'ACTIVE' as const },
     { key: 'ollama-chat', name: 'Ollama Chat', type: 'chat', description: 'Local conversational AI via Ollama (llama3)', baseUrl: 'http://localhost:11434', status: 'ACTIVE' as const },
     { key: 'gemini-vision', name: 'Gemini Vision', type: 'vision', description: 'Google Gemini API for image recognition', baseUrl: null, status: 'INACTIVE' as const },
+    { key: 'gemini-chat', name: 'Gemini Chat', type: 'chat', description: 'Google Gemini API for chat', baseUrl: null, status: 'INACTIVE' as const },
   ]
 
   for (const int of integrations) {
