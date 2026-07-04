@@ -7,9 +7,9 @@ const prisma = new PrismaClient()
 async function main() {
   const adminPassword = await bcrypt.hash(env.ADMIN_PASSWORD, 10)
 
-  const admin = await prisma.user.upsert({
+  await prisma.user.upsert({
     where: { email: 'admin@pokedex.com' },
-    update: {},
+    update: { passwordHash: adminPassword, role: 'ADMIN' },
     create: {
       email: 'admin@pokedex.com',
       username: 'admin',
@@ -36,16 +36,16 @@ async function main() {
     { key: 'pokeapi-graphql', name: 'PokéAPI GraphQL', type: 'data', description: 'Pokémon data source (GraphQL)', baseUrl: 'https://beta.pokeapi.co/graphql/v1beta', status: 'ACTIVE' as const },
     { key: 'claude', name: 'Claude AI', type: 'chat', description: 'Conversational assistant (Anthropic)', baseUrl: null, status: 'INACTIVE' as const },
     { key: 'vision', name: 'Vision AI', type: 'vision', description: 'Image recognition engine (external)', baseUrl: null, status: 'INACTIVE' as const },
-    { key: 'ollama-vision', name: 'Ollama Vision', type: 'vision', description: 'Local image recognition via Ollama (llava)', baseUrl: 'http://localhost:11434', status: 'ACTIVE' as const },
-    { key: 'ollama-chat', name: 'Ollama Chat', type: 'chat', description: 'Local conversational AI via Ollama (llama3)', baseUrl: 'http://localhost:11434', status: 'ACTIVE' as const },
-    { key: 'gemini-vision', name: 'Gemini Vision', type: 'vision', description: 'Google Gemini API for image recognition', baseUrl: null, status: 'INACTIVE' as const },
-    { key: 'gemini-chat', name: 'Gemini Chat', type: 'chat', description: 'Google Gemini API for chat', baseUrl: null, status: 'INACTIVE' as const },
+    { key: 'ollama-vision', name: 'Ollama Vision', type: 'vision', description: 'Local image recognition via Ollama (llava)', baseUrl: 'http://localhost:11434', status: 'INACTIVE' as const },
+    { key: 'ollama-chat', name: 'Ollama Chat', type: 'chat', description: 'Local conversational AI via Ollama (llama3)', baseUrl: 'http://localhost:11434', status: 'INACTIVE' as const },
+    { key: 'gemini-vision', name: 'Gemini Vision', type: 'vision', description: 'Google Gemini API for image recognition', baseUrl: null, status: 'ACTIVE' as const },
+    { key: 'gemini-chat', name: 'Gemini Chat', type: 'chat', description: 'Google Gemini API for chat', baseUrl: null, status: 'ACTIVE' as const },
   ]
 
   for (const int of integrations) {
     await prisma.integration.upsert({
       where: { key: int.key },
-      update: {},
+      update: { status: int.status, baseUrl: int.baseUrl },
       create: int,
     })
   }

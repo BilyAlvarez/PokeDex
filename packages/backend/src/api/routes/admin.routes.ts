@@ -198,17 +198,19 @@ router.post('/seed', async (_req, res, next) => {
     const hash = await bcrypt.hash(env.ADMIN_PASSWORD, 10)
     await prisma.user.upsert({
       where: { email: 'admin@pokedex.com' },
-      update: {},
+      update: { passwordHash: hash, role: 'ADMIN' },
       create: { email: 'admin@pokedex.com', username: 'admin', passwordHash: hash, role: 'ADMIN' },
     })
 
     await Promise.all([
-      prisma.integration.upsert({ where: { key: 'pokeapi' }, update: {}, create: { key: 'pokeapi', name: 'PokéAPI', type: 'data', description: 'Pokémon data source (REST)', baseUrl: 'https://pokeapi.co/api/v2', status: 'ACTIVE' } }),
-      prisma.integration.upsert({ where: { key: 'pokeapi-graphql' }, update: {}, create: { key: 'pokeapi-graphql', name: 'PokéAPI GraphQL', type: 'data', description: 'Pokémon data source (GraphQL)', baseUrl: 'https://beta.pokeapi.co/graphql/v1beta', status: 'ACTIVE' } }),
-      prisma.integration.upsert({ where: { key: 'claude' }, update: {}, create: { key: 'claude', name: 'Claude AI', type: 'chat', description: 'Conversational assistant (Anthropic)', status: 'INACTIVE' } }),
-      prisma.integration.upsert({ where: { key: 'vision' }, update: {}, create: { key: 'vision', name: 'Vision AI', type: 'vision', description: 'Image recognition engine (external)', status: 'INACTIVE' } }),
-      prisma.integration.upsert({ where: { key: 'ollama-vision' }, update: {}, create: { key: 'ollama-vision', name: 'Ollama Vision', type: 'vision', description: 'Local image recognition via Ollama (llava)', baseUrl: 'http://localhost:11434', status: 'INACTIVE' } }),
-      prisma.integration.upsert({ where: { key: 'ollama-chat' }, update: {}, create: { key: 'ollama-chat', name: 'Ollama Chat', type: 'chat', description: 'Local conversational AI via Ollama (llama3)', baseUrl: 'http://localhost:11434', status: 'ACTIVE' } }),
+      prisma.integration.upsert({ where: { key: 'pokeapi' }, update: { status: 'ACTIVE' }, create: { key: 'pokeapi', name: 'PokéAPI', type: 'data', description: 'Pokémon data source (REST)', baseUrl: 'https://pokeapi.co/api/v2', status: 'ACTIVE' } }),
+      prisma.integration.upsert({ where: { key: 'pokeapi-graphql' }, update: { status: 'ACTIVE' }, create: { key: 'pokeapi-graphql', name: 'PokéAPI GraphQL', type: 'data', description: 'Pokémon data source (GraphQL)', baseUrl: 'https://beta.pokeapi.co/graphql/v1beta', status: 'ACTIVE' } }),
+      prisma.integration.upsert({ where: { key: 'claude' }, update: { status: 'INACTIVE' }, create: { key: 'claude', name: 'Claude AI', type: 'chat', description: 'Conversational assistant (Anthropic)', status: 'INACTIVE' } }),
+      prisma.integration.upsert({ where: { key: 'vision' }, update: { status: 'INACTIVE' }, create: { key: 'vision', name: 'Vision AI', type: 'vision', description: 'Image recognition engine (external)', status: 'INACTIVE' } }),
+      prisma.integration.upsert({ where: { key: 'ollama-vision' }, update: { status: 'INACTIVE' }, create: { key: 'ollama-vision', name: 'Ollama Vision', type: 'vision', description: 'Local image recognition via Ollama (llava)', baseUrl: 'http://localhost:11434', status: 'INACTIVE' } }),
+      prisma.integration.upsert({ where: { key: 'ollama-chat' }, update: { status: 'INACTIVE' }, create: { key: 'ollama-chat', name: 'Ollama Chat', type: 'chat', description: 'Local conversational AI via Ollama (llama3)', baseUrl: 'http://localhost:11434', status: 'INACTIVE' } }),
+      prisma.integration.upsert({ where: { key: 'gemini-vision' }, update: { status: 'ACTIVE' }, create: { key: 'gemini-vision', name: 'Gemini Vision', type: 'vision', description: 'Google Gemini API for image recognition', status: 'ACTIVE' } }),
+      prisma.integration.upsert({ where: { key: 'gemini-chat' }, update: { status: 'ACTIVE' }, create: { key: 'gemini-chat', name: 'Gemini Chat', type: 'chat', description: 'Google Gemini API for chat', status: 'ACTIVE' } }),
     ])
 
     res.json({ message: 'Seed data created' })
